@@ -20,7 +20,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 2. Encabezado principal de la página
-st.markdown('<h1 class="main-title">🏥 Portal de Control - Salud Pública de Caquetá</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-title">🏥 Portal - Vigilancia Epidemiológica en Salud Pública - Caquetá</h1>', unsafe_allow_html=True)
 st.write("Bienvenido al sistema de visualización de indicadores de salud pública del departamento. Seleccione un módulo en el menú de la izquierda.")
 
 # 3. Menú de navegación lateral (Añadida la opción de Boletines)
