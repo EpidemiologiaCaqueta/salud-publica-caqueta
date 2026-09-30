@@ -66,16 +66,10 @@ urls_powerbi = {
 # 5. Lógica de renderizado según la selección del usuario
 if opcion == "📄 Boletines Epidemiológicos":
     st.subheader("📄 Histórico de Boletines Epidemiológicos")
-    st.write("Bienvenido al repositorio oficial de documentación del Área de Vigilancia Epidemiológica.")
-    
+        
     # Caja interactiva con diseño limpio institucional
     with st.container(border=True):
-        st.markdown("### 🏛️ Repositorio Digital Departamental")
-        st.write(
-            "Para garantizar el acceso oportuno a la información y dar cumplimiento a las normativas de "
-            "salud pública, los boletines se encuentran alojados en nuestro servidor institucional en la nube."
-        )
-        st.write("**Organización:** Por Semanas Epidemiológicas (SE).")
+        st.caption("Organizados por Semanas Epidemiológicas (SE).")
         
         # EL BOTÓN PRINCIPAL CON TU ENLACE PÚBLICO CORREGIDO
         st.link_button(
