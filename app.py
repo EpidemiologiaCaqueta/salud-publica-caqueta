@@ -23,14 +23,16 @@ st.markdown("""
 st.markdown('<h1 class="main-title">Portal - Vigilancia Epidemiológica en Salud Pública - Caquetá</h1>', unsafe_allow_html=True)
 st.write("Bienvenido al Sistema de Análisis Epidemiológico y Demográfico del Departamento. Aquí podrá consultar eventos de interés en salud pública, estadísticas de nacimientos y defunciones, y los boletines epidemiológicos oficiales. Seleccione un módulo en el menú de la izquierda.")
 
-# 3. Menú de navegación lateral con Logo Centrado de forma óptima
+# 3. Menú de navegación lateral con Logo en URL Directa Estable
+# Usamos una URL directa global que no falla en servidores web
+url_logo_estable = "https://githubusercontent.com"
+
 try:
-    # Cargamos la imagen directamente de los archivos del sitio web
-    # El parámetro 'use_container_width=True' adapta la imagen perfectamente al ancho del menú lateral
-    st.sidebar.image("logo.png", use_container_width=True)
+    # Desplegamos la imagen directamente desde la ruta del servidor
+    st.sidebar.image(url_logo_estable, use_container_width=True)
 except Exception:
-    # Respaldo de seguridad en caso de que falte el archivo físico
-    st.sidebar.markdown("<h3 style='text-align: center;'>🏥</h3>", unsafe_allow_html=True)
+    # Respaldo solo en caso extremo de desconexión
+    st.sidebar.markdown("<h3 style='text-align: center;'>🕵️‍♂️</h3>", unsafe_allow_html=True)
 
 st.sidebar.markdown("<hr style='margin-top: 10px; margin-bottom: 10px;'>", unsafe_allow_html=True)
 st.sidebar.markdown("<h2 style='text-align: center; margin-top: 0px;'>Módulos</h2>", unsafe_allow_html=True)
