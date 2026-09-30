@@ -83,7 +83,7 @@ if opcion == "📄 Boletines Epidemiológicos":
     st.info(
         "💡 **Información:** Al hacer clic en el botón superior, se abrirá una pestaña segura "
         "con el listado completo de carpetas. No requiere contraseñas institucionales y puede visualizar o descargar los archivos "
-        "PDF de manera inmediata desde cualquier computadora o dispositivo móvil."
+        "PDF desde cualquier dispositivo."
     )
 
 else:
