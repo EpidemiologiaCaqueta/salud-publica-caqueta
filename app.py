@@ -3,7 +3,7 @@ import streamlit as st
 # 1. Configuración de la página web
 st.set_page_config(
     page_title="Salud Pública Caquetá", 
-    page_icon="🏥", 
+    page_icon="logo.png", 
     layout="wide"
 )
 
