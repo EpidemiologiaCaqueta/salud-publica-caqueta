@@ -62,7 +62,10 @@ urls_powerbi = {
     "📌 Vigilancia Epidemiológica": "https://app.powerbi.com/view?r=eyJrIjoiYzFiOTAwMzQtN2VkNy00NDhiLThjMTItZGY3NzNhMjExMTkwIiwidCI6IjkxOTM0N2Q1LTkyMWUtNDczOC05MGJkLTJkMTU4YzUzM2QzOCIsImMiOjR9",
     "📊 Estadísticas Vitales": "https://app.powerbi.com/view?r=eyJrIjoiNTZiZjhlMzQtOTgxNS00MDUwLTlkMjMtMDQ2OWI3ZjA5YjU0IiwidCI6IjkxOTM0N2Q1LTkyMWUtNDczOC05MGJkLTJkMTU4YzUzM2QzOCIsImMiOjR9"
 }
-
+titulos_powerbi = {
+    "📌 Vigilancia Epidemiológica": "📌 Análisis de los Eventos de Interés en Salud Pública",
+    "📊 Estadísticas Vitales": "📊 Cifras de Nacimientos y Defunciones del Departamento"
+}
 # 5. Lógica de renderizado según la selección del usuario
 if opcion == "📄 Boletines Epidemiológicos":
     st.subheader("📄 Histórico de Boletines Epidemiológicos")
