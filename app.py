@@ -81,7 +81,7 @@ if opcion == "📄 Boletines Epidemiológicos":
     
     # Mensaje de orientación al ciudadano
     st.info(
-        "💡 **Información para el usuario:** Al hacer clic en el botón superior, se abrirá una pestaña segura "
+        "💡 **Información:** Al hacer clic en el botón superior, se abrirá una pestaña segura "
         "con el listado completo de carpetas. No requiere contraseñas institucionales y puede visualizar o descargar los archivos "
         "PDF de manera inmediata desde cualquier computadora o dispositivo móvil."
     )
