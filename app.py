@@ -23,16 +23,16 @@ st.markdown("""
 st.markdown('<h1 class="main-title">Portal - Vigilancia Epidemiológica en Salud Pública - Caquetá</h1>', unsafe_allow_html=True)
 st.write("Bienvenido al Sistema de Análisis Epidemiológico y Demográfico del Departamento. Aquí podrá consultar eventos de interés en salud pública, estadísticas de nacimientos y defunciones, y los boletines epidemiológicos oficiales. Seleccione un módulo en el menú de la izquierda.")
 
-# 3. Menú de navegación lateral con Logo Centrado desde archivo local
+# 3. Menú de navegación lateral con Logo Centrado de forma óptima
 try:
-    # Intenta cargar la imagen local 'logo.png' y centrarla usando columnas nativas
-    col_izq, col_centro, col_der = st.sidebar.columns([1, 2, 1])
-    with col_centro:
-        st.image("logo.png", width=120)
+    # Cargamos la imagen directamente de los archivos del sitio web
+    # El parámetro 'use_container_width=True' adapta la imagen perfectamente al ancho del menú lateral
+    st.sidebar.image("logo.png", use_container_width=True)
 except Exception:
-    # Si la imagen no se encuentra, muestra un texto alternativo limpio sin romper la página
+    # Respaldo de seguridad en caso de que falte el archivo físico
     st.sidebar.markdown("<h3 style='text-align: center;'>🏥</h3>", unsafe_allow_html=True)
 
+st.sidebar.markdown("<hr style='margin-top: 10px; margin-bottom: 10px;'>", unsafe_allow_html=True)
 st.sidebar.markdown("<h2 style='text-align: center; margin-top: 0px;'>Módulos</h2>", unsafe_allow_html=True)
 st.sidebar.write("Filtre y visualice los reportes disponibles:")
 
