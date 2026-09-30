@@ -25,7 +25,7 @@ st.write("Bienvenido al Sistema de Análisis Epidemiológico y Demográfico del 
 
 # 3. Menú de navegación lateral con Logo en URL Directa Estable
 # Usamos una URL directa global que no falla en servidores web
-url_logo_estable = "https://githubusercontent.com"
+url_logo_estable = "logo.png"
 
 try:
     # Desplegamos la imagen directamente desde la ruta del servidor
