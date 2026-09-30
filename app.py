@@ -23,9 +23,17 @@ st.markdown("""
 st.markdown('<h1 class="main-title">Portal - Vigilancia Epidemiológica en Salud Pública - Caquetá</h1>', unsafe_allow_html=True)
 st.write("Bienvenido al Sistema de Análisis Epidemiológico y Demográfico del Departamento. Aquí podrá consultar eventos de interés en salud pública, estadísticas de nacimientos y defunciones, y los boletines epidemiológicos oficiales. Seleccione un módulo en el menú de la izquierda.")
 
-# 3. Menú de navegación lateral (Añadida la opción de Boletines)
-st.sidebar.image("https://drive.google.com/uc?id=1t7nMTqXJ_yxgrUnl5xwuF-rH_EgAzbp4", width=100)
-st.sidebar.title("Módulos")
+# 3. Menú de navegación lateral con Logo Centrado desde archivo local
+try:
+    # Intenta cargar la imagen local 'logo.png' y centrarla usando columnas nativas
+    col_izq, col_centro, col_der = st.sidebar.columns([1, 2, 1])
+    with col_centro:
+        st.image("logo.png", width=120)
+except Exception:
+    # Si la imagen no se encuentra, muestra un texto alternativo limpio sin romper la página
+    st.sidebar.markdown("<h3 style='text-align: center;'>🏥</h3>", unsafe_allow_html=True)
+
+st.sidebar.markdown("<h2 style='text-align: center; margin-top: 0px;'>Módulos</h2>", unsafe_allow_html=True)
 st.sidebar.write("Filtre y visualice los reportes disponibles:")
 
 opcion = st.sidebar.radio(
