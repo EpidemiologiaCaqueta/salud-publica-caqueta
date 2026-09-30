@@ -60,7 +60,7 @@ if opcion == "📄 Boletines Epidemiológicos":
         # EL BOTÓN PRINCIPAL CON TU ENLACE PÚBLICO CORREGIDO
         st.link_button(
             "📂 Acceder a los Boletines Epidemiológicos en Google Drive", 
-            "https://google.com",
+            "https://drive.google.com/drive/folders/1tUQdlVhytJqKxA6-tBK4Yw7pThfy-X0h?usp=sharing",
             use_container_width=True,
             type="primary"
         )
