@@ -91,7 +91,7 @@ if opcion == "📄 Boletines Epidemiológicos":
 
 else:
     # Si elige un tablero de control, se renderiza el iframe interactivo normal
-    st.subheader(f"Visualizando: {opcion}")
+    st.subheader(titulos_powerbi[opcion])
     url_activa = urls_powerbi[opcion]
     st.components.v1.iframe(url_activa, height=700, scrolling=True)
 
