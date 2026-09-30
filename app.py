@@ -21,7 +21,7 @@ st.markdown("""
 
 # 2. Encabezado principal de la página
 st.markdown('<h1 class="main-title">🏥 Portal - Vigilancia Epidemiológica en Salud Pública - Caquetá</h1>', unsafe_allow_html=True)
-st.write("Bienvenido al sistema de visualización de indicadores de salud pública del departamento. Seleccione un módulo en el menú de la izquierda.")
+st.write("Bienvenido al Sistema de Análisis Epidemiológico y Demográfico del Departamento. Aquí podrá consultar el análisis de eventos de interés en salud pública, estadísticas de nacimientos y defunciones, y los boletines epidemiológicos oficiales. Seleccione un módulo en el menú de la izquierda.")
 
 # 3. Menú de navegación lateral (Añadida la opción de Boletines)
 st.sidebar.image("https://flaticon.com", width=100)
