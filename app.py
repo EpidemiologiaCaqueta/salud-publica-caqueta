@@ -39,28 +39,38 @@ opcion = st.sidebar.radio(
 
 # 4. Diccionario de URLs de Power BI
 urls_powerbi = {
-    "📌 Vigilancia Epidemiológica": "https://powerbi.com",
-    "📊 Estadísticas Vitales": "https://powerbi.com"
+    "📌 Vigilancia Epidemiológica": "https://app.powerbi.com/view?r=eyJrIjoiYzFiOTAwMzQtN2VkNy00NDhiLThjMTItZGY3NzNhMjExMTkwIiwidCI6IjkxOTM0N2Q1LTkyMWUtNDczOC05MGJkLTJkMTU4YzUzM2QzOCIsImMiOjR9",
+    "📊 Estadísticas Vitales": "https://app.powerbi.com/view?r=eyJrIjoiNTZiZjhlMzQtOTgxNS00MDUwLTlkMjMtMDQ2OWI3ZjA5YjU0IiwidCI6IjkxOTM0N2Q1LTkyMWUtNDczOC05MGJkLTJkMTU4YzUzM2QzOCIsImMiOjR9"
 }
 
 # 5. Lógica de renderizado según la selección del usuario
 if opcion == "📄 Boletines Epidemiológicos":
     st.subheader("📄 Histórico de Boletines Epidemiológicos")
-    st.write("Consulte y descargue los documentos oficiales emitidos por el equipo de vigilancia epidemiológica departamental:")
+    st.write("Bienvenido al repositorio oficial de documentación del Área de Vigilancia Epidemiológica.")
     
-    # Diseño en cuadrícula para organizar los archivos ordenadamente
-    col1, col2 = st.columns(2)
+    # Caja interactiva con diseño limpio institucional
+    with st.container(border=True):
+        st.markdown("### 🏛️ Repositorio Digital Departamental")
+        st.write(
+            "Para garantizar el acceso oportuno a la información y dar cumplimiento a las normativas de "
+            "salud pública, los boletines se encuentran alojados en nuestro servidor institucional en la nube."
+        )
+        st.write("**Organización:** Por Semanas Epidemiológicas (SE).")
+        
+        # EL BOTÓN PRINCIPAL CON TU ENLACE PÚBLICO CORREGIDO
+        st.link_button(
+            "📂 Acceder a los Boletines Epidemiológicos en Google Drive", 
+            "https://google.com",
+            use_container_width=True,
+            type="primary"
+        )
     
-    with col1:
-        st.info("📅 Boletines Año 2026")
-        # Copia la estructura del botón reemplazando las URL por los enlaces de tus archivos PDF
-        st.link_button("📥 Descargar Boletín Epidemiológico - Semana 03", "https://enlace_a_tu_pdf_en_google_drive.com")
-        st.link_button("📥 Descargar Boletín Epidemiológico - Semana 02", "https://enlace_a_tu_pdf_en_google_drive.com")
-        st.link_button("📥 Descargar Boletín Epidemiológico - Semana 01", "https://enlace_a_tu_pdf_en_google_drive.com")
-
-    with col2:
-        st.dark_note = "📅 Históricos Anteriores"
-        st.write("Para revisar períodos epidemiológicos de años previos, comuníquese con el área de sistemas o consulte el archivo físico institucional.")
+    # Mensaje de orientación al ciudadano
+    st.info(
+        "💡 **Información para el usuario:** Al hacer clic en el botón superior, se abrirá una pestaña segura "
+        "con el listado completo de carpetas. No requiere contraseñas institucionales y puede visualizar o descargar los archivos "
+        "PDF de manera inmediata desde cualquier computadora o dispositivo móvil."
+    )
 
 else:
     # Si elige un tablero de control, se renderiza el iframe interactivo normal
