@@ -94,4 +94,4 @@ else:
 
 # Pie de página institucional
 st.markdown("---")
-st.caption("© 2026 Área de Salud Pública - Departamento del Caquetá. Información para uso estrictamente informativo y estadístico.")
+st.caption("© 2026 Área de Vigilancia Epidemiológica - Departamento del Caquetá. Información para uso estrictamente informativo y estadístico.")
