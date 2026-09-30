@@ -20,12 +20,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 2. Encabezado principal de la página
-st.markdown('<h1 class="main-title">🏥 Portal - Vigilancia Epidemiológica en Salud Pública - Caquetá</h1>', unsafe_allow_html=True)
-st.write("Bienvenido al Sistema de Análisis Epidemiológico y Demográfico del Departamento. Aquí podrá consultar el análisis de eventos de interés en salud pública, estadísticas de nacimientos y defunciones, y los boletines epidemiológicos oficiales. Seleccione un módulo en el menú de la izquierda.")
+st.markdown('<h1 class="main-title">Portal - Vigilancia Epidemiológica en Salud Pública - Caquetá</h1>', unsafe_allow_html=True)
+st.write("Bienvenido al Sistema de Análisis Epidemiológico y Demográfico del Departamento. Aquí podrá consultar eventos de interés en salud pública, estadísticas de nacimientos y defunciones, y los boletines epidemiológicos oficiales. Seleccione un módulo en el menú de la izquierda.")
 
 # 3. Menú de navegación lateral (Añadida la opción de Boletines)
-st.sidebar.image("https://flaticon.com", width=100)
-st.sidebar.title("Módulos de Salud")
+st.sidebar.image("https://drive.google.com/uc?id=1t7nMTqXJ_yxgrUnl5xwuF-rH_EgAzbp4", width=100)
+st.sidebar.title("Módulos")
 st.sidebar.write("Filtre y visualice los reportes disponibles:")
 
 opcion = st.sidebar.radio(
