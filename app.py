@@ -16,6 +16,16 @@ st.markdown("""
         font-weight: bold;
         padding-bottom: 20px;
     }
+        .block-container {
+        padding-top: 3rem;
+    }
+    [data-testid="stSidebarHeader"] {
+        height: 1rem;
+        padding: 0;
+    }
+    [data-testid="stSidebarUserContent"] {
+        padding-top: 0rem;
+    }
     </style>
 """, unsafe_allow_html=True)
 
