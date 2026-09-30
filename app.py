@@ -7,7 +7,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Estilo personalizado para la identidad institucional (Verde/Azul institucional)
+# Estilo personalizado para la identidad institucional
 st.markdown("""
     <style>
     .main-title {
@@ -23,40 +23,50 @@ st.markdown("""
 st.markdown('<h1 class="main-title">🏥 Portal de Control - Salud Pública de Caquetá</h1>', unsafe_allow_html=True)
 st.write("Bienvenido al sistema de visualización de indicadores de salud pública del departamento. Seleccione un módulo en el menú de la izquierda.")
 
-# 3. Menú de navegación lateral
-st.sidebar.image("https://flaticon.com", width=100) # Icono opcional
+# 3. Menú de navegación lateral (Añadida la opción de Boletines)
+st.sidebar.image("https://flaticon.com", width=100)
 st.sidebar.title("Módulos de Salud")
 st.sidebar.write("Filtre y visualice los reportes disponibles:")
 
-# Opciones actualizadas (Eliminados vacunación e infantil; renombrado estadísticas)
 opcion = st.sidebar.radio(
-    "Seleccione un Tablero:",
+    "Seleccione un Tablero o Módulo:",
     [
         "📌 Vigilancia Epidemiológica", 
-        "📊 Estadísticas Vitales"
+        "📊 Estadísticas Vitales",
+        "📄 Boletines Epidemiológicos"
     ]
 )
 
-# 4. Diccionario de URLs de Power BI (Estructura limpia actualizada)
+# 4. Diccionario de URLs de Power BI
 urls_powerbi = {
     "📌 Vigilancia Epidemiológica": "https://powerbi.com",
     "📊 Estadísticas Vitales": "https://powerbi.com"
 }
 
-# 4. Diccionario de URLs de Power BI (Reemplaza con tus enlaces "Publicar en la Web")
-urls_powerbi = {
-    "📌 Vigilancia Epidemiológica": "https://app.powerbi.com/view?r=eyJrIjoiYzFiOTAwMzQtN2VkNy00NDhiLThjMTItZGY3NzNhMjExMTkwIiwidCI6IjkxOTM0N2Q1LTkyMWUtNDczOC05MGJkLTJkMTU4YzUzM2QzOCIsImMiOjR9",
-    "📊 Estadísticas Vitales": "https://app.powerbi.com/view?r=eyJrIjoiNTZiZjhlMzQtOTgxNS00MDUwLTlkMjMtMDQ2OWI3ZjA5YjU0IiwidCI6IjkxOTM0N2Q1LTkyMWUtNDczOC05MGJkLTJkMTU4YzUzM2QzOCIsImMiOjR9"
-}
+# 5. Lógica de renderizado según la selección del usuario
+if opcion == "📄 Boletines Epidemiológicos":
+    st.subheader("📄 Histórico de Boletines Epidemiológicos")
+    st.write("Consulte y descargue los documentos oficiales emitidos por el equipo de vigilancia epidemiológica departamental:")
+    
+    # Diseño en cuadrícula para organizar los archivos ordenadamente
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.info("📅 Boletines Año 2026")
+        # Copia la estructura del botón reemplazando las URL por los enlaces de tus archivos PDF
+        st.link_button("📥 Descargar Boletín Epidemiológico - Semana 03", "https://enlace_a_tu_pdf_en_google_drive.com")
+        st.link_button("📥 Descargar Boletín Epidemiológico - Semana 02", "https://enlace_a_tu_pdf_en_google_drive.com")
+        st.link_button("📥 Descargar Boletín Epidemiológico - Semana 01", "https://enlace_a_tu_pdf_en_google_drive.com")
 
-# 5. Renderizado del Tablero de Control seleccionado
-st.subheader(f"Visualizando: {opcion}")
+    with col2:
+        st.dark_note = "📅 Históricos Anteriores"
+        st.write("Para revisar períodos epidemiológicos de años previos, comuníquese con el área de sistemas o consulte el archivo físico institucional.")
 
-# Usamos un contenedor contenedor responsivo para el iframe de Power BI
-url_activa = urls_powerbi[opcion]
-
-# El iframe incrusta el reporte directo en la interfaz web de Python
-st.components.v1.iframe(url_activa, height=700, scrolling=True)
+else:
+    # Si elige un tablero de control, se renderiza el iframe interactivo normal
+    st.subheader(f"Visualizando: {opcion}")
+    url_activa = urls_powerbi[opcion]
+    st.components.v1.iframe(url_activa, height=700, scrolling=True)
 
 # Pie de página institucional
 st.markdown("---")
