@@ -67,8 +67,8 @@ titulos_powerbi = {
     "📊 Estadísticas Vitales": "📊 Cifras de Nacimientos y Defunciones del Departamento"
 }
 alturas_powerbi = {
-    "📌 Vigilancia Epidemiológica": 1400,
-    "📊 Estadísticas Vitales": 1200
+    "📌 Vigilancia Epidemiológica": 900,
+    "📊 Estadísticas Vitales": 1600
 }
 # 5. Lógica de renderizado según la selección del usuario
 if opcion == "📄 Boletines Epidemiológicos":
