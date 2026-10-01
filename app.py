@@ -49,7 +49,7 @@ st.markdown("""
 # 2. Encabezado principal de la página
 st.markdown('<h1 class="main-title">Portal de Vigilancia Epidemiológica</h1>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Salud Pública - Departamento del Caquetá</p>', unsafe_allow_html=True)
-st.write("Consulte eventos de interés en salud pública, estadísticas de nacimientos y defunciones, y los boletines epidemiológicos oficiales. Seleccione un módulo en el menú de la izquierda.")
+st.write("Consulte eventos de interés en salud pública, estadísticas de nacimientos y defunciones, boletines epidemiológicos oficiales y calendario epidemiológico. Seleccione un módulo en el menú de la izquierda.")
 
 # 3. Menú de navegación lateral con logo
 url_logo_estable = "logo.png"
