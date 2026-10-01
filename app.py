@@ -30,13 +30,13 @@ st.markdown("""
         font-family: 'Helvetica Neue', Arial, sans-serif;
         font-weight: 700;
         font-size: 2rem !important;
-        padding: 0;
-        margin: 0;
+        padding: 0 !important;
+        margin: 0 !important;
     }
     .sub-title {
         color: #5B6B82;
         font-size: 1.05rem;
-        margin: 0.2rem 0 1rem 0;
+        margin: -1rem 0 1rem 0 !important;
     }
     iframe {
         border: 1px solid #D9E2EF;
