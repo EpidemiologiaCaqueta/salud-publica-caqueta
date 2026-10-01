@@ -93,7 +93,7 @@ else:
     # Si elige un tablero de control, se renderiza el iframe interactivo normal
     st.subheader(titulos_powerbi[opcion])
     url_activa = urls_powerbi[opcion]
-    st.components.v1.iframe(url_activa, height=1000, scrolling=False)
+    st.components.v1.iframe(url_activa, height=1100, scrolling=False)
 
 # Pie de página institucional
 st.markdown("---")
