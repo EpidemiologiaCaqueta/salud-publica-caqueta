@@ -53,7 +53,8 @@ opcion = st.sidebar.radio(
     [
         "📌 Vigilancia Epidemiológica", 
         "📊 Estadísticas Vitales",
-        "📄 Boletines Epidemiológicos"
+        "📄 Boletines Epidemiológicos",
+        "🗓️ Calendario Epidemiológico 2026",
     ]
 )
 
@@ -92,7 +93,11 @@ if opcion == "📄 Boletines Epidemiológicos":
         "con el listado completo de carpetas. No requiere contraseñas institucionales y puede visualizar o descargar los archivos "
         "PDF desde cualquier dispositivo."
     )
-
+elif opcion == "🗓️ Calendario Epidemiológico 2026":
+    st.subheader("🗓️ Calendario Epidemiológico 2026")
+    st.image("calendario_epidemiologico_2026.png", use_container_width=True)
+    with open("calendario_epidemiologico_2026.pdf", "rb") as f:
+        st.download_button("⬇️ Descargar en PDF", f, file_name="calendario_epidemiologico_2026.pdf", mime="application/pdf")
 else:
     # Si elige un tablero de control, se renderiza el iframe interactivo normal
     st.subheader(titulos_powerbi[opcion])
