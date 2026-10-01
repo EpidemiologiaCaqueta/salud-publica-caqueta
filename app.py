@@ -66,6 +66,10 @@ titulos_powerbi = {
     "📌 Vigilancia Epidemiológica": "📌 Análisis de los Eventos de Interés en Salud Pública",
     "📊 Estadísticas Vitales": "📊 Cifras de Nacimientos y Defunciones del Departamento"
 }
+alturas_powerbi = {
+    "📌 Vigilancia Epidemiológica": 1400,
+    "📊 Estadísticas Vitales": 1200
+}
 # 5. Lógica de renderizado según la selección del usuario
 if opcion == "📄 Boletines Epidemiológicos":
     st.subheader("📄 Histórico de Boletines Epidemiológicos")
@@ -93,7 +97,7 @@ else:
     # Si elige un tablero de control, se renderiza el iframe interactivo normal
     st.subheader(titulos_powerbi[opcion])
     url_activa = urls_powerbi[opcion]
-    st.components.v1.iframe(url_activa, height=1400, scrolling=False)
+    st.components.v1.iframe(url_activa, height=alturas_powerbi[opcion], scrolling=False)
 
 # Pie de página institucional
 st.markdown("---")
