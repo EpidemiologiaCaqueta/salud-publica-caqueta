@@ -59,7 +59,6 @@ try:
 except Exception:
     st.sidebar.markdown("<h3 style='text-align: center;'>🕵️‍♂️</h3>", unsafe_allow_html=True)
 
-st.sidebar.caption("Área de Vigilancia Epidemiológica - Caquetá")
 st.sidebar.markdown("<hr style='margin-top: 10px; margin-bottom: 10px;'>", unsafe_allow_html=True)
 st.sidebar.markdown("<h2 style='text-align: center; margin-top: 0px;'>Módulos</h2>", unsafe_allow_html=True)
 
