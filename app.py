@@ -95,7 +95,9 @@ if opcion == "📄 Boletines Epidemiológicos":
     )
 elif opcion == "🗓️ Calendario Epidemiológico 2026":
     st.subheader("🗓️ Calendario Epidemiológico 2026")
-    st.image("Calendario2026.png", width=800)
+    col1, col2, col3 = st.columns([1, 3, 1])
+    with col2:
+        st.image("Calendario2026.png", use_container_width=True)
     with open("Calendario2026.pdf", "rb") as f:
         st.download_button("⬇️ Descargar en PDF", f, file_name="calendario_epidemiologico_2026.pdf", mime="application/pdf")
 else:
