@@ -132,5 +132,4 @@ if ACTUALIZACION:
     partes.append(f"Última actualización: {ACTUALIZACION}")
 if CONTACTO:
     partes.append(f"Contacto: {CONTACTO}")
-st.caption("  |  ".join(partes))
-st.caption("© 2026 Área de Vigilancia Epidemiológica - Departamento del Caquetá. Información para uso estrictamente informativo y estadístico.")
+st.caption("  |  ".join(partes) + "  \n© 2026 Área de Vigilancia Epidemiológica - Departamento del Caquetá. Información para uso estrictamente informativo y estadístico.")
