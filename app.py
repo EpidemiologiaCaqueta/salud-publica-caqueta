@@ -140,7 +140,13 @@ st.markdown("""
         color: #FFFFFF !important; /* Texto blanco fijo */
         font-weight: 700;
     }
-    
+        /* ---- Agrandar el texto y espacio del botón de descarga ---- */
+    [data-testid="stMain"] button[kind="secondary"] p,
+    [data-testid="stMain"] [data-testid="stBaseButton-secondary"] p {
+        font-size: 1.15rem !important; /* Aumenta el tamaño de la letra */
+        font-weight: 600 !important;   /* Lo hace un poco más grueso y legible */
+    }
+
     /* ---- Centrado y tamaño del título Módulos ---- */
     .nav-label {
         font-size: 1.15rem !important; /* Tamaño más grande y visible */
