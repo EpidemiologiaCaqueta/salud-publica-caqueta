@@ -119,8 +119,19 @@ elif opcion == "Calendario Epidemiológico 2026":
                 mime="application/pdf",
                 use_container_width=True
             )
+
 elif opcion == "Manual de Codificación de EISP":
     st.subheader("Manual de Codificación de EISP")
+    st.pdf("Codificacion_EISP.pdf", height=1000)
+    with open("Codificacion_EISP.pdf", "rb") as f:
+        st.download_button(
+            "⬇️ Descargar en PDF",
+            f,
+            file_name="Manual_Codificacion_EISP.pdf",
+            mime="application/pdf",
+            use_container_width=True
+        )
+
 else:
     st.subheader(titulos_powerbi[opcion])
     url_activa = urls_powerbi[opcion]
