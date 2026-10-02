@@ -69,6 +69,7 @@ opcion = st.sidebar.radio(
         "Estadísticas Vitales",
         "Boletines Epidemiológicos",
         "Calendario Epidemiológico 2026",
+        "Manual de Codificación de EISP",
     ]
 )
 
@@ -118,7 +119,8 @@ elif opcion == "Calendario Epidemiológico 2026":
                 mime="application/pdf",
                 use_container_width=True
             )
-
+elif opcion == "Manual de Codificación de EISP":
+    st.subheader("Manual de Codificación de EISP")
 else:
     st.subheader(titulos_powerbi[opcion])
     url_activa = urls_powerbi[opcion]
