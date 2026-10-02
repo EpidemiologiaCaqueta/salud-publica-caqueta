@@ -87,6 +87,15 @@ alturas_powerbi = {
     "Estadísticas Vitales": 1670
 }
 
+
+# Convierte cada página del PDF en imagen (se calcula una sola vez)
+@st.cache_data
+def paginas_pdf(ruta):
+    import fitz
+    doc = fitz.open(ruta)
+    return [p.get_pixmap(dpi=150).tobytes("png") for p in doc]
+
+
 # 5. Lógica de renderizado según la selección del usuario
 if opcion == "Boletines Epidemiológicos":
     st.subheader("Histórico de Boletines Epidemiológicos")
@@ -122,7 +131,9 @@ elif opcion == "Calendario Epidemiológico 2026":
 
 elif opcion == "Manual de Codificación de EISP":
     st.subheader("Manual de Codificación de EISP")
-    st.pdf("Codificacion_EISP.pdf", height=1000)
+    with st.container(height=900):
+        for img in paginas_pdf("Codificacion_EISP.pdf"):
+            st.image(img, use_container_width=True)
     with open("Codificacion_EISP.pdf", "rb") as f:
         st.download_button(
             "⬇️ Descargar en PDF",
