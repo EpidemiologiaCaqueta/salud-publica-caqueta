@@ -377,7 +377,7 @@ if opcion == "Inicio":
         with st.container(border=True, key="card_documentos"):
             st.markdown(f'<div style="text-align: center; margin-bottom: 0.1rem;"><img src="data:image/png;base64,{b64_img("icono2.png")}" width="180px"></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-titulo" style="text-align: center;">Documentos de consulta</div>', unsafe_allow_html=True)
-            st.markdown('<p style="color: #4A5568; font-size: 0.95rem; line-height: 1.5; margin: 0; text-align: center;">Acceso integrado en pantalla al calendario epidemiológico anual y al manual de codificación oficial para la correcta gestión de la EISP.</p>', unsafe_allow_html=True)
+            st.markdown('<p style="color: #4A5568; font-size: 0.95rem; line-height: 1.5; margin: 0; text-align: center;">Acceso integrado en pantalla al calendario epidemiológico anual y al manual de codificación oficial para la correcta gestión de los EISP.</p>', unsafe_allow_html=True)
             
     with c3:
         with st.container(border=True, key="card_boletines"):
