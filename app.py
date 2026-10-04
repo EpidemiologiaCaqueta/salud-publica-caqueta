@@ -201,12 +201,11 @@ st.markdown("""
         border-radius: 14px !important;
         box-shadow: 0 4px 14px rgba(11, 60, 140, 0.05);
         padding: 1.5rem !important;
-        min-height: 320px !important; /* <--- ESTA LÍNEA OBLIGA A QUE TODAS MIDAN LO MISMO */
+        min-height: 380px !important; /* <--- ESTA LÍNEA OBLIGA A QUE TODAS MIDAN LO MISMO */
         display: flex !important;
         flex-direction: column !important;
         justify-content: flex-start !important;
     }
-
 
         /* ---- Estilo del Título de la Tarjeta ---- */
     .card-titulo {
@@ -367,7 +366,7 @@ if opcion == "Inicio":
             return ""
 
     # 2. Renderizado de Tarjetas Informativas con conversión e Inyección Directa en HTML
-    c1, c2, c3 = st.columns(3)
+    c1, c2, c3, c4 = st.columns(4)
     with c1:
         with st.container(border=True, key="card_tableros"):
             # Ajusta el tamaño cambiando el width="150px" si lo deseas más grande o pequeño
@@ -386,10 +385,15 @@ if opcion == "Inicio":
             st.markdown(f'<div style="text-align: center; margin-bottom: 0.1rem;"><img src="data:image/png;base64,{b64_img("icono3.png")}" width="180px"></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-titulo" style="text-align: center;">Boletines en la nube</div>', unsafe_allow_html=True)
             st.markdown('<p style="color: #4A5568; font-size: 0.95rem; line-height: 1.5; margin: 0; text-align: center;">Repositorio centralizado ordenado cronológicamente por semanas epidemiológicas enlazado directamente a los servidores institucionales.</p>', unsafe_allow_html=True)
+    with c4:
+        with st.container(border=True, key="card_georreferenciacion"):
+            st.markdown(f'<div style="text-align: center; height: 180px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.1rem;"><img src="data:image/png;base64,{b64_img("icono4.png")}" width="140px"></div>', unsafe_allow_html=True)
+            st.markdown('<div class="card-titulo" style="text-align: center;">Georreferenciación</div>', unsafe_allow_html=True)
+            st.markdown('<p style="color: #4A5568; font-size: 0.95rem; line-height: 1.5; margin: 0; text-align: center;">Mapas por municipio de los eventos de interés en salud pública del Caquetá, con filtros por evento, año y semana epidemiológica.</p>', unsafe_allow_html=True)
 
 elif opcion == "Georreferenciación de EISP":
     render_mapa()
-
+    
 elif opcion == "Boletines Epidemiológicos":
     st.subheader("Histórico de Boletines Epidemiológicos")
     with st.container(border=True):
