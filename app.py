@@ -1,5 +1,6 @@
 import base64
 import streamlit as st
+from mapa_municipal import render_mapa
 
 # 1. Configuración de la página web
 st.set_page_config(
@@ -285,6 +286,7 @@ ICONOS = {
     "Inicio": ":material/home:",
     "Vigilancia Epidemiológica": ":material/monitoring:",
     "Estadísticas Vitales": ":material/bar_chart:",
+    "Georreferenciación de EISP": ":material/map:",
     "Boletines Epidemiológicos": ":material/newspaper:",
     "Calendario Epidemiológico 2026": ":material/calendar_month:",
     "Manual de Codificación de EISP": ":material/menu_book:",
@@ -384,6 +386,9 @@ if opcion == "Inicio":
             st.markdown(f'<div style="text-align: center; margin-bottom: 0.1rem;"><img src="data:image/png;base64,{b64_img("icono3.png")}" width="180px"></div>', unsafe_allow_html=True)
             st.markdown('<div class="card-titulo" style="text-align: center;">Boletines en la nube</div>', unsafe_allow_html=True)
             st.markdown('<p style="color: #4A5568; font-size: 0.95rem; line-height: 1.5; margin: 0; text-align: center;">Repositorio centralizado ordenado cronológicamente por semanas epidemiológicas enlazado directamente a los servidores institucionales.</p>', unsafe_allow_html=True)
+
+elif opcion == "Georreferenciación de EISP":
+    render_mapa()
 
 elif opcion == "Boletines Epidemiológicos":
     st.subheader("Histórico de Boletines Epidemiológicos")
