@@ -256,10 +256,6 @@ def render_mapa():
         use_container_width=True
     )
 
-    st.caption(
-        "Fuente: SIVIGILA. Datos agregados por municipio de procedencia."
-    )
-
     if es_tasa:
         st.caption(
             "La tasa usa la población DANE del municipio; al contar "
