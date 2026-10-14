@@ -65,26 +65,7 @@ def render_mapa():
 
    
     # ---- Panel profesional de filtros
-    st.markdown(
-        """
-        <div style="
-            background-color: #12365A;
-            padding: 16px 20px;
-            border-radius: 10px;
-            margin-bottom: 14px;
-            color: white;
-        ">
-            <div style="font-size: 22px; font-weight: 700;">
-                Salud Pública Caquetá
-            </div>
-            <div style="font-size: 13px; margin-top: 4px; opacity: 0.9;">
-                Vigilancia epidemiológica · Distribución municipal de casos
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
+    
     st.markdown("#### Filtros de consulta")
 
     # Primera fila: evento y año
