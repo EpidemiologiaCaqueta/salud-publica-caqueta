@@ -194,7 +194,7 @@ iframe { border: 1px solid #DCE3EE; border-radius: 12px; background: #FFFFFF; }
 
 .seccion {
     display: flex; align-items: baseline; justify-content: space-between;
-    margin: 0.6rem 0 0.1rem 0;
+    margin: 1.6rem 0 0.35rem 0;
 }
 .seccion-titulo { font-family: 'Poppins', sans-serif; font-size: 1.02rem; font-weight: 700; color: #0F2744; }
 .seccion-nota { font-size: 0.8rem; color: #94A3B8; }
@@ -220,12 +220,14 @@ iframe { border: 1px solid #DCE3EE; border-radius: 12px; background: #FFFFFF; }
 [class*="st-key-card_"] > [data-testid="stElementContainer"]:last-child { margin-top: auto; }
 .tile-head { display: flex; align-items: flex-start; justify-content: space-between; }
 .tile-icon {
-    width: 64px; height: 64px;
-    border-radius: 14px;
-    background: #F1F6FD;
+    width: 76px; height: 76px;
+    border-radius: 16px;
+    background: #EEF4FC;
+    border: 1px solid #DCE7F7;
+    overflow: hidden;
     display: flex; align-items: center; justify-content: center;
 }
-.tile-icon img { width: 52px; height: 52px; object-fit: contain; }
+.tile-icon img { width: 70px; height: 70px; object-fit: contain; transform: scale(1.18); }
 .tile-tag {
     font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
     color: #0B3C8C; background: #EAF1FC; border-radius: 6px; padding: 0.2rem 0.5rem;
@@ -269,7 +271,15 @@ iframe { border: 1px solid #DCE3EE; border-radius: 12px; background: #FFFFFF; }
 }
 .panel-titulo { font-family: 'Poppins', sans-serif; font-size: 0.98rem; font-weight: 700; color: #0F2744; }
 .panel-sub { font-size: 0.8rem; color: #94A3B8; }
-.panel-texto { color: #475569 !important; font-size: 0.9rem !important; line-height: 1.6 !important; margin: 0.4rem 0 0.2rem 0 !important; }
+.panel-texto { color: #64748B !important; font-size: 0.86rem !important; line-height: 1.55 !important; margin: 0.9rem 0 0.9rem 0 !important; }
+[class*="st-key-panel_"] [data-testid="stDownloadButton"],
+[class*="st-key-panel_"] [data-testid="stLinkButton"] { margin-top: 0.15rem; }
+.portada-pdf { display: flex; justify-content: center; }
+.portada-pdf img {
+    width: 100%; max-width: 230px; border-radius: 6px;
+    border: 1px solid #E3E8F0; box-shadow: 0 8px 22px rgba(15, 39, 68, 0.12);
+}
+.portada-nota { text-align: center; font-size: 0.75rem; color: #94A3B8; margin-top: 0.5rem; }
 .bol-head { display: flex; align-items: center; gap: 0.9rem; }
 .lista-check { margin-top: 0.5rem; }
 .lista-check div {
@@ -308,7 +318,6 @@ iframe { border: 1px solid #DCE3EE; border-radius: 12px; background: #FFFFFF; }
 [data-testid="stMain"] [class*="st-key-panel_"] button p,
 [data-testid="stMain"] [class*="st-key-panel_"] a p { font-size: 0.85rem !important; font-weight: 600 !important; }
 [class*="st-key-panel_powerbi"] [data-testid="stLinkButton"] { display: flex; justify-content: flex-end; }
-.st-key-panel_manual { max-width: 720px; }
 
 /* Ícono del módulo activo visible en el menú */
 [data-testid="stSidebar"] [data-testid="stBaseButton-primary"] [data-testid="stIconMaterial"] { color: #0B3C8C !important; }
@@ -378,6 +387,17 @@ def resumen_datos(version_datos=None):
         }
     except Exception:
         return None
+
+
+@st.cache_data
+def portada_pdf(ruta):
+    """Imagen de la primera página del PDF y número total de páginas."""
+    try:
+        import fitz
+        doc = fitz.open(ruta)
+        return doc[0].get_pixmap(dpi=90).tobytes("png"), len(doc)
+    except Exception:
+        return None, None
 
 
 @st.cache_data
@@ -572,9 +592,9 @@ elif opcion == "Boletines Epidemiológicos":
                 '<div class="bol-head">'
                 f'<div class="tile-icon"><img src="data:image/png;base64,{b64_img("icono3.png")}"></div>'
                 '<div><div class="panel-titulo">Repositorio oficial de boletines</div>'
-                '<div class="panel-sub">Histórico completo organizado por semana epidemiológica (SE)</div></div>'
+                '<div class="panel-sub">Carpeta pública en Google Drive</div></div>'
                 '</div>'
-                '<p class="panel-texto">Consulte los boletines en línea o descárguelos en PDF desde la carpeta oficial en Google Drive.</p>',
+                '<p class="panel-texto">Consulte cada boletín en línea o descárguelo en PDF. Las carpetas están ordenadas de la semana más reciente a la más antigua.</p>',
                 unsafe_allow_html=True
             )
             st.link_button(
@@ -648,26 +668,40 @@ elif opcion == "Calendario Epidemiológico 2026":
 elif opcion == "Manual de Codificación de EISP":
     import os
     peso = os.path.getsize("Codificacion_EISP.pdf") / 1024
+    portada, n_paginas = portada_pdf("Codificacion_EISP.pdf")
     with st.container(key="panel_manual"):
-        st.markdown(
-            '<div class="bol-head">'
-            f'<div class="tile-icon"><img src="data:image/png;base64,{b64_img("icono2.png")}"></div>'
-            '<div><div class="panel-titulo">Manual de Codificación de EISP</div>'
-            f'<div class="panel-sub">Documento PDF · {peso:,.0f} KB</div></div>'
-            '</div>'
-            '<p class="panel-texto">Guía oficial para la codificación de los eventos de interés en salud pública. '
-            'Descargue el documento completo para consultarlo en su equipo.</p>',
-            unsafe_allow_html=True
-        )
-        with open("Codificacion_EISP.pdf", "rb") as f:
-            st.download_button(
-                "Descargar PDF",
-                f,
-                file_name="Manual_Codificacion_EISP.pdf",
-                mime="application/pdf",
-                icon=":material/download:",
-                type="primary",
+        c1, c2 = st.columns([1.5, 1], gap="large")
+        with c1:
+            detalle = f"PDF · {peso:,.0f} KB".replace(",", ".")
+            if n_paginas:
+                detalle += f" · {n_paginas} páginas"
+            st.markdown(
+                '<div class="bol-head">'
+                f'<div class="tile-icon"><img src="data:image/png;base64,{b64_img("icono2.png")}"></div>'
+                '<div><div class="panel-titulo">Documento completo</div>'
+                f'<div class="panel-sub">{detalle}</div></div>'
+                '</div>'
+                '<p class="panel-texto">Descargue el manual para consultarlo en su equipo, incluso sin conexión. '
+                'Contiene los códigos y criterios para registrar correctamente cada evento.</p>',
+                unsafe_allow_html=True
             )
+            with open("Codificacion_EISP.pdf", "rb") as f:
+                st.download_button(
+                    "Descargar PDF",
+                    f,
+                    file_name="Manual_Codificacion_EISP.pdf",
+                    mime="application/pdf",
+                    icon=":material/download:",
+                    type="primary",
+                )
+        with c2:
+            if portada:
+                b64 = base64.b64encode(portada).decode("utf-8")
+                st.markdown(
+                    f'<div class="portada-pdf"><img src="data:image/png;base64,{b64}" alt="Portada del manual"></div>'
+                    '<div class="portada-nota">Vista previa de la portada</div>',
+                    unsafe_allow_html=True
+                )
 
 else:
     with st.container(key="panel_powerbi"):
