@@ -363,7 +363,7 @@ def b64_img(ruta_img):
 
 
 @st.cache_data
-def resumen_datos():
+def resumen_datos(version_datos=None):
     """Resumen automático de casos_municipio.csv (portada y pie de página)."""
     try:
         import pandas as pd
@@ -392,7 +392,8 @@ def ir_a(modulo):
     st.session_state.modulo = modulo
 
 
-RESUMEN = resumen_datos()
+import os
+RESUMEN = resumen_datos(os.path.getmtime("casos_municipio.csv") if os.path.exists("casos_municipio.csv") else None)
 
 # =====================================================================
 # 4. Menú lateral
