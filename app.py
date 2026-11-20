@@ -2,7 +2,9 @@ import base64
 import streamlit as st
 from mapa_municipal import render_mapa
 
-# 1. Configuración de la página web
+# =====================================================================
+# 1. Configuración de la página
+# =====================================================================
 st.set_page_config(
     page_title="Salud Pública Caquetá",
     page_icon="logo.png",
@@ -11,275 +13,395 @@ st.set_page_config(
 
 # Datos editables del pie de página (si dejas uno vacío, no se muestra)
 FUENTES = "Sivigila, RUAF-ND"
-ACTUALIZACION = ""   # Ejemplo: "30/09/2026"
+ACTUALIZACION = ""   # Ejemplo: "30/09/2026". Vacío = usa la última SE de los datos del mapa
 CONTACTO = ""        # Ejemplo: "vigilancia@ejemplo.gov.co"
 
-# Estilo personalizado para la identidad institucional
+# Colores institucionales
+AZUL = "#0B3C8C"
+
+# =====================================================================
+# 2. Estilos
+# =====================================================================
 st.markdown("""
-    <style>
-    @import url('https://googleapis.com');
-    
-    /* ---- Tipografía ---- */
-    .stApp {
-        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
-    }
-    h1, h2, h3, h4 {
-        font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif !important;
-        font-weight: 700 !important;
-    }
-    [data-testid="stCaptionContainer"] {
-        color: #4A5568 !important;
-    }
-    
-    /* ---- Espaciado general ---- */
-    .block-container {
-        padding-top: 3rem;
-    }
-    [data-testid="stSidebarHeader"] {
-        height: 1rem;
-        padding: 0;
-    }
-    [data-testid="stSidebarUserContent"] {
-        padding-top: 1rem;
-    }
-    
-        /* ---- Barra lateral: Fondo azul grisáceo y estructura ---- */
-    [data-testid="stSidebar"],
-    [data-testid="stSidebarContent"] {
-        background-color: #F1F5F9 !important; /* Fondo estructurado */
-    }
-    [data-testid="stSidebar"] {
-        border-right: 1px solid #E2E8F0;
-    }
-    [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
-        gap: 0.3rem;
-    }
-    [data-testid="stSidebar"] button {
-        justify-content: flex-start;
-        text-align: left;
-        border-radius: 8px;
-        padding: 0.55rem 0.75rem;
-        min-height: 0;
-        transition: all 0.2s ease-in-out; /* Animación suave */
-    }
-    [data-testid="stSidebar"] button > div {
-        justify-content: flex-start;
-        width: 100%;
-    }
-        /* ---- Agrandar el texto y el icono del Link Button (Boletines) ---- */
-    [data-testid="stLinkButton"] a p {
-        font-size: 1.15rem !important; /* Aumenta el tamaño del texto */
-        font-weight: 600 !important;   /* Lo hace un poco más grueso y legible */
-        letter-spacing: 0.3px;         /* Da una separación elegante a las letras */
-    }
-    
-    [data-testid="stLinkButton"] a span {
-        font-size: 1.25rem !important; /* Aumenta ligeramente el tamaño del emoji de la carpeta */
-    }
-    /* ---- ADAPTACIÓN AUTOMÁTICA PARA CELULARES (Pantallas menores a 768px) ---- */
-    @media (max-width: 768px) {
-        /* 1. Hace que las tarjetas se apilen una debajo de la otra en vertical */
-        [data-testid="stHorizontalBlock"] {
-            flex-direction: column !important;
-            gap: 1.5rem !important;
-        }
-        
-        /* 2. Permite que las tarjetas reduzcan su altura fija en celular para que no sobre espacio */
-        [class*="st-key-card_"] {
-            min-height: auto !important; 
-            padding: 1.2rem !important;
-        }
-        
-        /* 3. Escala los iconos de forma fluida para que se adapten a la pantalla del teléfono */
-        [class*="st-key-card_"] img {
-            max-width: 140px !important; /* Tamaño ligeramente menor y cómodo para pantallas móviles */
-            height: auto !important;
-        }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap');
 
-        /* 4. Ajusta el tamaño de la tipografía principal para que no ocupe toda la pantalla del celular */
-        .hero-title {
-            font-size: 1.9rem !important;
-        }
-        .hero-sub {
-            font-size: 1.05rem !important;
-        }
-    }
+/* ---------- Base ---------- */
+.stApp, .stApp p, .stApp li, .stApp label, .stApp button {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+}
+h1, h2, h3, h4 {
+    font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif !important;
+    letter-spacing: -0.01em;
+}
+[data-testid="stAppViewContainer"] { background: #F4F6FA; }
+header[data-testid="stHeader"] { background: transparent; }
+[data-testid="stToolbarActions"], [data-testid="stDecoration"], #MainMenu { display: none !important; }
+.block-container {
+    padding-top: 2rem !important;
+    padding-bottom: 1.5rem !important;
+    max-width: 1480px;
+}
+[data-testid="stMain"] [data-testid="stVerticalBlock"] { gap: 0.75rem; }
 
-    /* Botones NO seleccionados (Estado normal) */
-    [data-testid="stSidebar"] button[kind="secondary"],
-    [data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] {
-        background: #FFFFFF !important; /* Fondo blanco */
-        border: 1px solid #E2E8F0 !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-    }
-    [data-testid="stSidebar"] button[kind="secondary"] p,
-    [data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] p {
-        color: #4A5568 !important; /* Texto gris oscuro */
-        font-weight: 500;
-    }
-    
-    /* Botones NO seleccionados (Al pasar el cursor por encima) */
-    [data-testid="stSidebar"] button[kind="secondary"]:hover,
-    [data-testid="stSidebar"] [data-testid="stBaseButton-secondary"]:hover {
-        background: #0B3C8C !important; /* Se pinta de azul oscuro */
-        border-color: #0B3C8C !important;
-    }
-    [data-testid="stSidebar"] button[kind="secondary"]:hover p,
-    [data-testid="stSidebar"] [data-testid="stBaseButton-secondary"]:hover p {
-        color: #FFFFFF !important; /* Texto cambia a blanco */
-    }
-    
-    /* Botón SELECCIONADO (Módulo activo permanente) */
-    [data-testid="stSidebar"] button[kind="primary"],
-    [data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {
-        background: #0B3C8C !important; /* Azul oscuro sólido fijo */
-        border: 1px solid #0B3C8C !important;
-        box-shadow: 0 4px 6px rgba(11, 60, 140, 0.2) !important;
-    }
-    [data-testid="stSidebar"] button[kind="primary"] p,
-    [data-testid="stSidebar"] [data-testid="stBaseButton-primary"] p {
-        color: #FFFFFF !important; /* Texto blanco fijo */
-        font-weight: 700;
-    }
-        /* ---- Agrandar el texto y espacio del botón de descarga ---- */
-    [data-testid="stMain"] button[kind="secondary"] p,
-    [data-testid="stMain"] [data-testid="stBaseButton-secondary"] p {
-        font-size: 1.15rem !important; /* Aumenta el tamaño de la letra */
-        font-weight: 600 !important;   /* Lo hace un poco más grueso y legible */
-    }
+/* Títulos internos de los módulos (st.title / st.subheader) más compactos */
+[data-testid="stMain"] [data-testid="stHeading"] h1 { font-size: 1.35rem !important; font-weight: 700 !important; color: #0F2744; padding: 0.2rem 0 !important; }
+[data-testid="stMain"] [data-testid="stHeading"] h2 { font-size: 1.2rem !important; color: #0F2744; }
+[data-testid="stMain"] [data-testid="stHeading"] h3 { font-size: 1.05rem !important; color: #0F2744; padding: 0.2rem 0 !important; }
+[data-testid="stMain"] [data-testid="stHeading"] h4 { font-size: 0.95rem !important; color: #0F2744; }
+[data-testid="stCaptionContainer"] { color: #64748B !important; }
 
-    /* ---- Centrado y tamaño del título Módulos ---- */
-    .nav-label {
-        font-size: 1.15rem !important; /* Tamaño más grande y visible */
-        font-family: 'Poppins', sans-serif !important;
-        font-weight: 700 !important;
-        color: #000000 !important; /* Azul institucional */
-        text-align: center;
-        margin: 1.2rem 0 1rem 0 !important; /* Mayor separación de la línea superior */
-    }
-    
-    /* ---- Encabezado de los módulos ---- */
-    .main-title {
-        color: #0B3C8C !important;
-        font-size: 2rem !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-    .sub-title {
-        color: #4A5568;
-        font-size: 1.05rem;
-        margin: -0.4rem 0 1rem 0 !important;
-    }
-    
-    /* ---- Portada (hero sin gráfica) ---- */
-    .hero-title {
-        color: #0B3C8C !important;
-        font-size: 2.8rem !important;
-        font-weight: 800 !important;
-        line-height: 1.2 !important;
-        padding: 0 !important;
-        margin: 0 0 0.5rem 0 !important;
-    }
-    .hero-sub {
-        color: #1E293B;
-        font-size: 1.25rem;
-        font-weight: 500;
-        line-height: 1.5;
-        margin: 0 0 1.5rem 0;
-    }
-    .texto {
-        color: #4A5568;
-        font-size: 1.05rem;
-        line-height: 1.65;
-        margin: 0 0 1rem 0;
-    }
-    
-        /* ---- Estilizado y simetría de Tarjetas Informativas (Forzar igual tamaño) ---- */
-    [class*="st-key-card_"] {
-        background: #FFFFFF;
-        border: 1px solid #E5EAF2 !important;
-        border-radius: 14px !important;
-        box-shadow: 0 4px 14px rgba(11, 60, 140, 0.05);
-        padding: 1.5rem !important;
-        min-height: 380px !important; /* <--- ESTA LÍNEA OBLIGA A QUE TODAS MIDAN LO MISMO */
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: flex-start !important;
-    }
+/* Botones generales del área principal (descargas, enlaces) */
+[data-testid="stMain"] [data-testid="stBaseButton-secondary"] p,
+[data-testid="stLinkButton"] a p { font-size: 0.95rem !important; font-weight: 600 !important; }
 
-        /* ---- Estilo del Título de la Tarjeta ---- */
-    .card-titulo {
-        font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
-        font-size: 1.15rem !important; /* Reducido levemente de 1.25rem para mejor equilibrio */
-        font-weight: 700;
-        color: #0B3C8C;
-        margin: 0.5rem 0 0.3rem 0 !important; /* Espaciado compacto */
-    }
+/* Bordes de contenedores y tableros */
+[data-testid="stMain"] [data-testid="stVerticalBlockBorderWrapper"] { border-radius: 12px; }
+iframe { border: 1px solid #DCE3EE; border-radius: 12px; background: #FFFFFF; }
 
-    /* ---- Estilo del Párrafo descriptivo ---- */
-    .card-descripcion {
-        color: #4A5568;
-        font-size: 0.88rem !important; /* Estilizado de 0.95rem a 0.88rem (Más limpio) */
-        line-height: 1.45;
-    }
+/* ---------- Barra lateral ---------- */
+[data-testid="stSidebar"], [data-testid="stSidebarContent"] { background: #FFFFFF !important; }
+[data-testid="stSidebar"] { border-right: 1px solid #E3E8F0; }
+[data-testid="stSidebarHeader"] { height: 0.5rem; padding: 0; }
+[data-testid="stSidebarUserContent"] { padding-top: 0.6rem; }
+[data-testid="stSidebar"] [data-testid="stVerticalBlock"] { gap: 0.15rem; }
+.side-logo { display: flex; justify-content: center; align-items: center; padding: 0.4rem 0 0.2rem 0; }
+.side-logo img { width: 190px; max-width: 85%; height: auto; display: block; }
+.nav-label {
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #94A3B8 !important;
+    margin: 1rem 0 0.55rem 0.7rem !important;
+    line-height: 1.2 !important;
+    padding: 0 !important;
+}
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] { margin-bottom: 0 !important; }
+.nav-sep { border: none; border-top: 1px solid #EDF1F6; margin: 0.6rem 0 0 0; }
+[data-testid="stSidebar"] button {
+    justify-content: flex-start;
+    text-align: left;
+    border-radius: 8px !important;
+    padding: 0.45rem 0.7rem !important;
+    min-height: 0 !important;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+[data-testid="stSidebar"] button > div { justify-content: flex-start; width: 100%; }
+[data-testid="stSidebar"] button p { font-size: 0.9rem !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+[data-testid="stSidebar"] [data-testid="stIconMaterial"] { font-size: 1.15rem !important; }
+/* No seleccionado */
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+}
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] p { color: #475569 !important; font-weight: 500; }
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"]:hover { background: #F1F5FB !important; }
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"]:hover p { color: #0B3C8C !important; }
+/* Seleccionado */
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {
+    background: #EAF1FC !important;
+    border: 1px solid #EAF1FC !important;
+    box-shadow: inset 3px 0 0 #0B3C8C !important;
+}
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] p { color: #0B3C8C !important; font-weight: 700; }
+.side-foot {
+    margin: 1.2rem 0.6rem 0 0.6rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid #EDF1F6;
+    font-size: 0.74rem;
+    line-height: 1.45;
+    color: #94A3B8;
+}
 
-    
-    /* ---- Tableros ---- */
-    iframe {
-        border: 1px solid #D9E2EF;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(11, 60, 140, 0.10);
-    }
-    </style>
+/* ---------- Portada ---------- */
+.hero {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 1.8rem;
+    align-items: center;
+    background: linear-gradient(125deg, #082D6B 0%, #0B3C8C 45%, #1A5FC0 100%);
+    border-radius: 16px;
+    padding: 1.9rem 2.1rem;
+    box-shadow: 0 12px 30px rgba(8, 45, 107, 0.22);
+}
+.hero::after {
+    content: "";
+    position: absolute;
+    right: -120px; top: -140px;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0) 70%);
+    pointer-events: none;
+}
+.hero-eyebrow {
+    color: #A9C4EE !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 0.55rem 0 !important;
+}
+.hero-title {
+    color: #FFFFFF !important;
+    font-size: 2.15rem !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
+    padding: 0 !important;
+    margin: 0 0 0.6rem 0 !important;
+}
+.hero-sub {
+    color: #DCE7F7 !important;
+    font-size: 0.98rem !important;
+    line-height: 1.55 !important;
+    margin: 0 0 1rem 0 !important;
+    max-width: 640px;
+}
+.hero-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 999px;
+    padding: 0.3rem 0.85rem;
+    color: #FFFFFF;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.hero-meta .punto { width: 7px; height: 7px; border-radius: 50%; background: #4ADE80; box-shadow: 0 0 0 3px rgba(74,222,128,0.25); }
+.hero-stats { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.7rem; }
+.stat {
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px;
+    padding: 0.95rem 0.9rem;
+    backdrop-filter: blur(4px);
+}
+.stat-valor {
+    font-family: 'Poppins', sans-serif;
+    color: #FFFFFF;
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+.stat-valor small { font-size: 0.9rem; font-weight: 600; color: #BFD3F3; margin-left: 0.15rem; }
+.stat-label { color: #C3D5F2; font-size: 0.75rem; line-height: 1.3; margin-top: 0.4rem; }
+
+.seccion {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin: 0.6rem 0 0.1rem 0;
+}
+.seccion-titulo { font-family: 'Poppins', sans-serif; font-size: 1.02rem; font-weight: 700; color: #0F2744; }
+.seccion-nota { font-size: 0.8rem; color: #94A3B8; }
+
+/* Tarjetas de módulos */
+[class*="st-key-card_"] {
+    background: #FFFFFF;
+    border: 1px solid #E3E8F0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1px 2px rgba(15, 39, 68, 0.04);
+    padding: 1.15rem 1.2rem 1.1rem 1.2rem !important;
+    min-height: 268px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.35rem !important;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+[class*="st-key-card_"]:hover {
+    border-color: #C7D6EE !important;
+    box-shadow: 0 10px 24px rgba(11, 60, 140, 0.10);
+    transform: translateY(-2px);
+}
+[class*="st-key-card_"] > [data-testid="stElementContainer"]:last-child { margin-top: auto; }
+.tile-head { display: flex; align-items: flex-start; justify-content: space-between; }
+.tile-icon {
+    width: 64px; height: 64px;
+    border-radius: 14px;
+    background: #F1F6FD;
+    display: flex; align-items: center; justify-content: center;
+}
+.tile-icon img { width: 52px; height: 52px; object-fit: contain; }
+.tile-tag {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #0B3C8C; background: #EAF1FC; border-radius: 6px; padding: 0.2rem 0.5rem;
+}
+.tile-title { font-family: 'Poppins', sans-serif; font-size: 1.02rem; font-weight: 700; color: #0F2744; margin: 0.8rem 0 0.25rem 0; }
+.tile-desc { color: #64748B !important; font-size: 0.86rem !important; line-height: 1.5 !important; margin: 0 !important; }
+[class*="st-key-card_"] [data-testid="stBaseButton-secondary"] {
+    background: #FFFFFF !important;
+    border: 1px solid #D5DFEE !important;
+    border-radius: 9px !important;
+    min-height: 0 !important;
+    padding: 0.4rem 0.8rem !important;
+}
+[data-testid="stMain"] [class*="st-key-card_"] [data-testid="stBaseButton-secondary"] p {
+    font-size: 0.85rem !important; font-weight: 600 !important; color: #0B3C8C !important;
+}
+[class*="st-key-card_"] [data-testid="stBaseButton-secondary"]:hover { background: #0B3C8C !important; border-color: #0B3C8C !important; }
+[class*="st-key-card_"] [data-testid="stBaseButton-secondary"]:hover p { color: #FFFFFF !important; }
+
+/* ---------- Encabezado de los módulos ---------- */
+.page-head {
+    background: #FFFFFF;
+    border: 1px solid #E3E8F0;
+    border-left: 4px solid #0B3C8C;
+    border-radius: 12px;
+    padding: 0.85rem 1.2rem;
+    margin-bottom: 0.4rem;
+}
+.crumb { font-size: 0.74rem; color: #94A3B8; font-weight: 500; margin-bottom: 0.15rem; }
+.crumb b { color: #0B3C8C; font-weight: 600; }
+.page-title { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700; color: #0F2744; line-height: 1.25; }
+.page-desc { font-size: 0.88rem; color: #64748B; margin-top: 0.15rem; }
+
+/* ---------- Paneles de los módulos ---------- */
+[class*="st-key-panel_"] {
+    background: #FFFFFF;
+    border: 1px solid #E3E8F0;
+    border-radius: 12px;
+    padding: 1rem 1.15rem !important;
+    gap: 0.6rem !important;
+}
+.panel-titulo { font-family: 'Poppins', sans-serif; font-size: 0.98rem; font-weight: 700; color: #0F2744; }
+.panel-sub { font-size: 0.8rem; color: #94A3B8; }
+.panel-texto { color: #475569 !important; font-size: 0.9rem !important; line-height: 1.6 !important; margin: 0.4rem 0 0.2rem 0 !important; }
+.bol-head { display: flex; align-items: center; gap: 0.9rem; }
+.lista-check { margin-top: 0.5rem; }
+.lista-check div {
+    display: flex; gap: 0.6rem; align-items: flex-start;
+    padding: 0.5rem 0; border-bottom: 1px solid #EEF2F7;
+    font-size: 0.86rem; color: #475569;
+}
+.lista-check div:last-child { border-bottom: none; }
+.ok { color: #16A34A; font-weight: 700; }
+.se-actual {
+    background: linear-gradient(125deg, #082D6B 0%, #0B3C8C 55%, #1A5FC0 100%);
+    border-radius: 12px; padding: 1rem 1.1rem; color: #FFFFFF;
+}
+.se-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #A9C4EE; }
+.se-num { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 700; line-height: 1.1; margin-top: 0.2rem; }
+.se-fechas { font-size: 0.85rem; color: #DCE7F7; }
+.resumen-lat { margin: 0.7rem 0 0.4rem 0; border-top: 1px solid #EEF2F7; }
+.resumen-lat div { display: flex; justify-content: space-between; padding: 0.45rem 0; border-bottom: 1px solid #EEF2F7; font-size: 0.85rem; }
+.resumen-lat span { color: #64748B; }
+.resumen-lat b { color: #0F2744; font-weight: 600; }
+[class*="st-key-panel_"] [data-testid="stBaseButton-primary"],
+[class*="st-key-panel_"] [data-testid="stBaseLinkButton-primary"] {
+    background: #0B3C8C !important; border-color: #0B3C8C !important; border-radius: 9px !important;
+}
+[class*="st-key-panel_"] [data-testid="stBaseButton-primary"] p,
+[class*="st-key-panel_"] [data-testid="stBaseLinkButton-primary"] p { color: #FFFFFF !important; }
+
+/* Botones compactos dentro de los paneles */
+[class*="st-key-panel_"] [data-testid="stBaseButton-primary"],
+[class*="st-key-panel_"] [data-testid="stBaseLinkButton-primary"],
+[class*="st-key-panel_"] [data-testid="stBaseLinkButton-secondary"] {
+    min-height: 0 !important;
+    padding: 0.4rem 1rem !important;
+    width: auto !important;
+}
+[data-testid="stMain"] [class*="st-key-panel_"] button p,
+[data-testid="stMain"] [class*="st-key-panel_"] a p { font-size: 0.85rem !important; font-weight: 600 !important; }
+[class*="st-key-panel_powerbi"] [data-testid="stLinkButton"] { display: flex; justify-content: flex-end; }
+.st-key-panel_manual { max-width: 720px; }
+
+/* Ícono del módulo activo visible en el menú */
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] [data-testid="stIconMaterial"] { color: #0B3C8C !important; }
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] [data-testid="stIconMaterial"] { color: #64748B !important; }
+
+/* ---------- Pie de página ---------- */
+.pie {
+    margin-top: 1.6rem;
+    background: #0A2350;
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem 0.9rem 1.5rem;
+    color: #B8C8E2;
+    font-size: 0.82rem;
+}
+.pie-fila { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.8rem 2rem; }
+.pie-marca { font-family: 'Poppins', sans-serif; color: #FFFFFF; font-weight: 700; font-size: 0.95rem; }
+.pie-entidad { color: #9FB3D6; font-size: 0.8rem; margin-top: 0.1rem; }
+.pie-datos { display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem; }
+.pie-datos span { color: #B8C8E2; }
+.pie-datos b { color: #FFFFFF; font-weight: 600; }
+.pie-legal {
+    margin-top: 0.85rem; padding-top: 0.7rem;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    font-size: 0.74rem; color: #7F94BA;
+}
+
+/* ---------- Celulares ---------- */
+@media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 1.4rem 1.3rem; gap: 1.1rem; }
+    .hero-title { font-size: 1.6rem !important; }
+    .stat-valor { font-size: 1.45rem; }
+}
+@media (max-width: 768px) {
+    [data-testid="stHorizontalBlock"] { flex-direction: column !important; gap: 0.8rem !important; }
+    [class*="st-key-card_"] { min-height: auto !important; }
+    .block-container { padding-top: 3.2rem !important; }
+}
+</style>
 """, unsafe_allow_html=True)
 
-def svg_a_img(svg, ancho="100%"):
-    """Incrusta un SVG como imagen para que Markdown no lo altere."""
-    b64 = base64.b64encode(svg.encode("utf-8")).decode("utf-8")
-    return f'<img src="data:image/svg+xml;base64,{b64}" style="width:{ancho};" />'
 
-def icono(trazos):
-    """Ícono de línea en azul institucional (24x24) con URL XML corregida."""
-    return (
-        '<svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" '
-        'stroke="#0B3C8C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-        + trazos + '</svg>'
-    )
+# =====================================================================
+# 3. Utilidades
+# =====================================================================
+@st.cache_data
+def b64_img(ruta_img):
+    try:
+        with open(ruta_img, "rb") as f:
+            return base64.b64encode(f.read()).decode("utf-8")
+    except FileNotFoundError:
+        return ""
 
-ICONO_TABLERO = (
-    '<div style="text-align: center; margin-bottom: 0.5rem;">'
-    '<svg xmlns="http://w3.org" width="48" height="48" viewBox="0 0 24 24" fill="none" '
-    'stroke="#0B3C8C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-    '<path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/>'
-    '</svg></div>'
+
+@st.cache_data
+def resumen_datos():
+    """Resumen automático de casos_municipio.csv (portada y pie de página)."""
+    try:
+        import pandas as pd
+        d = pd.read_csv("casos_municipio.csv", dtype={"evento": str})
+        anio = int(d["anio"].max())
+        d = d[d["anio"] == anio]
+        return {
+            "eventos": d["evento"].nunique(),
+            "anio": anio,
+            "semana": int(d["semana"].max()),
+            "casos": int(d["casos"].sum()),
+        }
+    except Exception:
+        return None
+
+
+@st.cache_data
+def paginas_pdf(ruta):
+    """Convierte cada página del PDF en imagen."""
+    import fitz
+    doc = fitz.open(ruta)
+    return [p.get_pixmap(dpi=150).tobytes("png") for p in doc]
+
+
+def ir_a(modulo):
+    st.session_state.modulo = modulo
+
+
+RESUMEN = resumen_datos()
+
+# =====================================================================
+# 4. Menú lateral
+# =====================================================================
+st.sidebar.markdown(
+    f'<div class="side-logo"><img src="data:image/png;base64,{b64_img("logo.png")}" alt="Vigilancia Epidemiológica"></div>'
+    '<hr class="nav-sep">',
+    unsafe_allow_html=True
 )
-
-ICONO_DOCUMENTO = (
-    '<div style="text-align: center; margin-bottom: 0.5rem;">'
-    '<svg xmlns="http://w3.org" width="48" height="48" viewBox="0 0 24 24" fill="none" '
-    'stroke="#0B3C8C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-    '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>'
-    '<polyline points="14 2 14 8 20 8"/>'
-    '</svg></div>'
-)
-
-ICONO_NUBE = (
-    '<div style="text-align: center; margin-bottom: 0.5rem;">'
-    '<svg xmlns="http://w3.org" width="48" height="48" viewBox="0 0 24 24" fill="none" '
-    'stroke="#0B3C8C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-    '<path d="M7 18a4 4 0 0 1-.5-7.97A6 6 0 0 1 18 9.5a4.5 4.5 0 0 1-.5 8.5H7z"/>'
-    '</svg></div>'
-)
-
-# 2. Menú de navegación lateral con logo
-url_logo_estable = "logo.png"
-try:
-    st.sidebar.image(url_logo_estable, use_container_width=True)
-except Exception:
-    st.sidebar.markdown("<h3 style='text-align: center;'>🕵️‍♂️</h3>", unsafe_allow_html=True)
-
-st.sidebar.markdown("<hr style='margin-top: 5px; margin-bottom: 5px; border-color: #CBD5E1;'>", unsafe_allow_html=True)
-st.sidebar.markdown('<p class="nav-label">Módulos</p>', unsafe_allow_html=True)
 
 ICONOS = {
     "Inicio": ":material/home:",
@@ -291,163 +413,292 @@ ICONOS = {
     "Manual de Codificación de EISP": ":material/menu_book:",
 }
 
+DESCRIPCIONES = {
+    "Vigilancia Epidemiológica": "Análisis de los eventos de interés en salud pública notificados al Sivigila.",
+    "Estadísticas Vitales": "Cifras de nacimientos y defunciones del departamento.",
+    "Georreferenciación de EISP": "Casos por municipio con filtros por evento, año y semana epidemiológica.",
+    "Boletines Epidemiológicos": "Histórico de boletines organizados por semana epidemiológica (SE).",
+    "Calendario Epidemiológico 2026": "Semanas epidemiológicas oficiales del año 2026.",
+    "Manual de Codificación de EISP": "Guía oficial de codificación de los eventos de interés en salud pública.",
+}
+
 MODULOS = list(ICONOS.keys())
 if "modulo" not in st.session_state:
     st.session_state.modulo = MODULOS[0]
 
-for nombre in MODULOS:
-    activo = st.session_state.modulo == nombre
-    if st.sidebar.button(
-        nombre,
-        key=f"btn_{nombre}",
-        icon=ICONOS[nombre],
-        use_container_width=True,
-        type="primary" if activo else "secondary"
-    ):
-        st.session_state.modulo = nombre
-        st.rerun()
+# Nombres cortos para el menú (el nombre completo se ve en el encabezado del módulo)
+ETIQUETAS = {
+    "Inicio": "Inicio",
+    "Vigilancia Epidemiológica": "Eventos de interés (EISP)",
+    "Estadísticas Vitales": "Estadísticas vitales",
+    "Georreferenciación de EISP": "Georreferenciación",
+    "Boletines Epidemiológicos": "Boletines",
+    "Calendario Epidemiológico 2026": "Calendario 2026",
+    "Manual de Codificación de EISP": "Manual de codificación",
+}
+GRUPOS = [
+    ("General", ["Inicio"]),
+    ("Análisis", ["Vigilancia Epidemiológica", "Estadísticas Vitales", "Georreferenciación de EISP"]),
+    ("Documentos", ["Boletines Epidemiológicos", "Calendario Epidemiológico 2026", "Manual de Codificación de EISP"]),
+]
+
+for grupo, nombres in GRUPOS:
+    st.sidebar.markdown(f'<p class="nav-label">{grupo}</p>', unsafe_allow_html=True)
+    for nombre in nombres:
+        st.sidebar.button(
+            ETIQUETAS[nombre],
+            key=f"btn_{nombre}",
+            icon=ICONOS[nombre],
+            use_container_width=True,
+            type="primary" if st.session_state.modulo == nombre else "secondary",
+            on_click=ir_a,
+            args=(nombre,),
+        )
+
+st.sidebar.markdown(
+    '<div class="side-foot">Área de Vigilancia Epidemiológica<br>'
+    'Secretaría de Salud Departamental del Caquetá</div>',
+    unsafe_allow_html=True
+)
 
 opcion = st.session_state.modulo
 
-# 3. Encabezado compacto (solo en los módulos; Inicio tiene su propia portada)
+# Encabezado compacto de cada módulo (Inicio tiene su propia portada)
 if opcion != "Inicio":
-    st.markdown('<h1 class="main-title">Portal de Vigilancia Epidemiológica</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-title">Salud Pública - Departamento del Caquetá</p>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="page-head">'
+        f'<div class="page-title">{opcion}</div>'
+        f'<div class="page-desc">{DESCRIPCIONES.get(opcion, "")}</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
 
-# 4. Diccionarios de Power BI
+# =====================================================================
+# 5. Tableros de Power BI
+# =====================================================================
 urls_powerbi = {
     "Vigilancia Epidemiológica": "https://app.powerbi.com/view?r=eyJrIjoiYzFiOTAwMzQtN2VkNy00NDhiLThjMTItZGY3NzNhMjExMTkwIiwidCI6IjkxOTM0N2Q1LTkyMWUtNDczOC05MGJkLTJkMTU4YzUzM2QzOCIsImMiOjR9",
     "Estadísticas Vitales": "https://app.powerbi.com/view?r=eyJrIjoiNTZiZjhlMzQtOTgxNS00MDUwLTlkMjMtMDQ2OWI3ZjA5YjU0IiwidCI6IjkxOTM0N2Q1LTkyMWUtNDczOC05MGJkLTJkMTU4YzUzM2QzOCIsImMiOjR9"
-}
-titulos_powerbi = {
-    "Vigilancia Epidemiológica": "Análisis de los Eventos de Interés en Salud Pública",
-    "Estadísticas Vitales": "Cifras de Nacimientos y Defunciones del Departamento"
 }
 alturas_powerbi = {
     "Vigilancia Epidemiológica": 900,
     "Estadísticas Vitales": 1670
 }
 
-# Convierte cada página del PDF en imagen
-@st.cache_data
-def paginas_pdf(ruta):
-    import fitz
-    doc = fitz.open(ruta)
-    return [p.get_pixmap(dpi=150).tobytes("png") for p in doc]
-
-# 5. Lógica de renderizado según la selección del usuario
+# =====================================================================
+# 6. Contenido de cada módulo
+# =====================================================================
 if opcion == "Inicio":
-    st.markdown('<h1 class="hero-title">Portal de Vigilancia Epidemiológica</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="hero-sub">Salud Pública — Departamento del Caquetá</p>', unsafe_allow_html=True)
-    
-    st.markdown(
-        '<p class="texto">Este portal reúne la información oficial de vigilancia en salud pública del Departamento del Caquetá: '
-        'análisis de eventos de interés notificados al Sivigila, estadísticas de nacimientos y defunciones, boletines epidemiológicos, '
-        'el calendario epidemiológico 2026 y el manual de codificación de EISP.</p>',
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        '<p class="texto">Los sistemas interactivos y documentos técnicos se encuentran categorizados y listos para su consulta. '
-        'Seleccione el módulo de su interes en el menú lateral para comenzar la navegación.</p>',
-        unsafe_allow_html=True
-    )
-    
-    st.write("")
-    st.write("")
-    
-       # 1. Función local automática para codificar las imágenes (Asegúrate de dejarla alineada aquí)
-    import base64
-    
-    def b64_img(ruta_img):
-        try:
-            with open(ruta_img, "rb") as f:
-                return base64.b64encode(f.read()).decode('utf-8')
-        except FileNotFoundError:
-            return ""
+    # ---- Banner con indicadores ----
+    if RESUMEN:
+        meta = f'<span class="punto"></span>Datos actualizados a la SE {RESUMEN["semana"]} de {RESUMEN["anio"]}'
+        stats = (
+            f'<div class="stat"><div class="stat-valor">{RESUMEN["eventos"]}</div><div class="stat-label">Eventos georreferenciados</div></div>'
+            f'<div class="stat"><div class="stat-valor">{RESUMEN["semana"]}<small>SE</small></div><div class="stat-label">Última semana epidemiológica</div></div>'
+            '<div class="stat"><div class="stat-valor">16</div><div class="stat-label">Municipios del Caquetá</div></div>'
+        )
+    else:
+        meta = '<span class="punto"></span>Información oficial del departamento'
+        stats = '<div class="stat"><div class="stat-valor">16</div><div class="stat-label">Municipios del Caquetá</div></div>'
 
-    # 2. Renderizado de Tarjetas Informativas con conversión e Inyección Directa en HTML
-    c1, c2, c3, c4 = st.columns(4)
-    with c1:
-        with st.container(border=True, key="card_tableros"):
-            # Ajusta el tamaño cambiando el width="150px" si lo deseas más grande o pequeño
-            st.markdown(f'<div style="text-align: center; margin-bottom: 0.1rem;"><img src="data:image/png;base64,{b64_img("icono1.png")}" width="180px"></div>', unsafe_allow_html=True)
-            st.markdown('<div class="card-titulo" style="text-align: center;">Tableros interactivos</div>', unsafe_allow_html=True)
-            st.markdown('<p style="color: #4A5568; font-size: 0.95rem; line-height: 1.5; margin: 0; text-align: center;">Módulos dinámicos para filtrar por semana, año y evento epidemiológico directamente en la plataforma con actualizaciones continuas.</p>', unsafe_allow_html=True)
-            
-    with c2:
-        with st.container(border=True, key="card_documentos"):
-            st.markdown(f'<div style="text-align: center; margin-bottom: 0.1rem;"><img src="data:image/png;base64,{b64_img("icono2.png")}" width="180px"></div>', unsafe_allow_html=True)
-            st.markdown('<div class="card-titulo" style="text-align: center;">Documentos de consulta</div>', unsafe_allow_html=True)
-            st.markdown('<p style="color: #4A5568; font-size: 0.95rem; line-height: 1.5; margin: 0; text-align: center;">Acceso integrado en pantalla al calendario epidemiológico anual y al manual de codificación oficial para la correcta gestión de los EISP.</p>', unsafe_allow_html=True)
-            
-    with c3:
-        with st.container(border=True, key="card_boletines"):
-            st.markdown(f'<div style="text-align: center; margin-bottom: 0.1rem;"><img src="data:image/png;base64,{b64_img("icono3.png")}" width="180px"></div>', unsafe_allow_html=True)
-            st.markdown('<div class="card-titulo" style="text-align: center;">Boletines en la nube</div>', unsafe_allow_html=True)
-            st.markdown('<p style="color: #4A5568; font-size: 0.95rem; line-height: 1.5; margin: 0; text-align: center;">Repositorio centralizado ordenado cronológicamente por semanas epidemiológicas enlazado directamente a los servidores institucionales.</p>', unsafe_allow_html=True)
-    with c4:
-        with st.container(border=True, key="card_georreferenciacion"):
-            st.markdown(f'<div style="text-align: center; height: 180px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.1rem;"><img src="data:image/png;base64,{b64_img("icono4.png")}" width="140px"></div>', unsafe_allow_html=True)
-            st.markdown('<div class="card-titulo" style="text-align: center;">Georreferenciación</div>', unsafe_allow_html=True)
-            st.markdown('<p style="color: #4A5568; font-size: 0.95rem; line-height: 1.5; margin: 0; text-align: center;">Mapas por municipio de los eventos de interés en salud pública del Caquetá, con filtros por evento, año y semana epidemiológica.</p>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="hero">'
+        '<div style="position: relative; z-index: 1;">'
+        '<p class="hero-eyebrow">Secretaría de Salud Departamental del Caquetá</p>'
+        '<h1 class="hero-title">Portal de Vigilancia Epidemiológica</h1>'
+        '<p class="hero-sub">Información oficial de vigilancia en salud pública del Caquetá: eventos de interés '
+        'notificados al Sivigila, estadísticas vitales, georreferenciación, boletines y documentos técnicos.</p>'
+        f'<div class="hero-meta">{meta}</div>'
+        '</div>'
+        f'<div class="hero-stats">{stats}</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
+
+    # ---- Accesos directos ----
+    st.markdown(
+        '<div class="seccion"><span class="seccion-titulo">Módulos del portal</span>'
+        '<span class="seccion-nota">Seleccione un módulo para comenzar</span></div>',
+        unsafe_allow_html=True
+    )
+
+    TARJETAS = [
+        ("tableros", "icono1.png", "Interactivo", "Tableros interactivos",
+         "Filtros por semana, año y evento epidemiológico con actualización continua.",
+         "Vigilancia Epidemiológica"),
+        ("georreferenciacion", "icono4.png", "Mapas", "Georreferenciación",
+         "Casos por municipio de los eventos de interés en salud pública del Caquetá.",
+         "Georreferenciación de EISP"),
+        ("boletines", "icono3.png", "Repositorio", "Boletines epidemiológicos",
+         "Histórico ordenado por semanas epidemiológicas, disponible en la nube.",
+         "Boletines Epidemiológicos"),
+        ("documentos", "icono2.png", "Documentos", "Documentos de consulta",
+         "Calendario epidemiológico anual y manual oficial de codificación de EISP.",
+         "Calendario Epidemiológico 2026"),
+    ]
+
+    columnas = st.columns(4)
+    for col, (clave, img, tag, titulo, desc, destino) in zip(columnas, TARJETAS):
+        with col:
+            with st.container(key=f"card_{clave}"):
+                st.markdown(
+                    '<div class="tile-head">'
+                    f'<div class="tile-icon"><img src="data:image/png;base64,{b64_img(img)}"></div>'
+                    f'<span class="tile-tag">{tag}</span>'
+                    '</div>'
+                    f'<div class="tile-title">{titulo}</div>'
+                    f'<p class="tile-desc">{desc}</p>',
+                    unsafe_allow_html=True
+                )
+                st.button(
+                    "Abrir módulo",
+                    key=f"ir_{clave}",
+                    icon=":material/arrow_forward:",
+                    on_click=ir_a,
+                    args=(destino,),
+                    use_container_width=True,
+                )
 
 elif opcion == "Georreferenciación de EISP":
     render_mapa()
-    
-elif opcion == "Boletines Epidemiológicos":
-    st.subheader("Histórico de Boletines Epidemiológicos")
-    with st.container(border=True):
-        st.caption("Organizados por Semanas Epidemiológicas (SE).")
-        st.link_button(
-            "📂 Acceder a los Boletines Epidemiológicos en Google Drive",
-            "https://drive.google.com/drive/folders/1tUQdlVhytJqKxA6-tBK4Yw7pThfy-X0h?usp=sharing",
-            use_container_width=True,
-            type="primary"
-        )
-    st.info(
-        "💡 **Información:** Al hacer clic en el botón superior, se abrirá una pestaña segura "
-        "con el listado completo de carpetas. No requiere contraseñas institucionales y puede visualizar o descargar los archivos "
-        "PDF desde cualquier dispositivo."
-    )
 
-elif opcion == "Calendario Epidemiológico 2026":
-    st.subheader("Calendario Epidemiológico 2026")
-    col1, col2, col3 = st.columns([1, 3, 1])
-    with col2:
-        st.image("Calendario2026.png", use_container_width=True)
-        with open("Calendario2026.pdf", "rb") as f:
-            st.download_button(
-                "⬇️ Descargar en PDF",
-                f,
-                file_name="calendario_epidemiologico_2026.pdf",
-                mime="application/pdf",
-                use_container_width=True
+elif opcion == "Boletines Epidemiológicos":
+    URL_BOLETINES = "https://drive.google.com/drive/folders/1tUQdlVhytJqKxA6-tBK4Yw7pThfy-X0h?usp=sharing"
+    with st.container(key="panel_boletines"):
+        c1, c2 = st.columns([1.5, 1], gap="large")
+        with c1:
+            st.markdown(
+                '<div class="bol-head">'
+                f'<div class="tile-icon"><img src="data:image/png;base64,{b64_img("icono3.png")}"></div>'
+                '<div><div class="panel-titulo">Repositorio oficial de boletines</div>'
+                '<div class="panel-sub">Histórico completo organizado por semana epidemiológica (SE)</div></div>'
+                '</div>'
+                '<p class="panel-texto">Consulte los boletines en línea o descárguelos en PDF desde la carpeta oficial en Google Drive.</p>',
+                unsafe_allow_html=True
+            )
+            st.link_button(
+                "Abrir boletines",
+                URL_BOLETINES,
+                icon=":material/open_in_new:",
+                type="primary",
+            )
+        with c2:
+            st.markdown(
+                '<div class="lista-check">'
+                '<div><span class="ok">✓</span>Acceso público, sin usuario ni contraseña</div>'
+                '<div><span class="ok">✓</span>Ordenados cronológicamente por SE</div>'
+                '<div><span class="ok">✓</span>Formato PDF, desde cualquier dispositivo</div>'
+                '<div><span class="ok">✓</span>Se abre en una pestaña nueva</div>'
+                '</div>',
+                unsafe_allow_html=True
             )
 
+elif opcion == "Calendario Epidemiológico 2026":
+    import datetime as dt
+    try:
+        from zoneinfo import ZoneInfo
+        hoy = dt.datetime.now(ZoneInfo("America/Bogota")).date()
+    except Exception:
+        hoy = dt.date.today()
+
+    def inicio_se1(anio):
+        """Domingo en que inicia la SE 1 (semana con al menos 4 días del año)."""
+        enero4 = dt.date(anio, 1, 4)
+        return enero4 - dt.timedelta(days=(enero4.weekday() + 1) % 7)
+
+    inicio = inicio_se1(hoy.year)
+    if hoy < inicio:
+        inicio = inicio_se1(hoy.year - 1)
+    se_actual = (hoy - inicio).days // 7 + 1
+    ini_se = inicio + dt.timedelta(weeks=se_actual - 1)
+    fin_se = ini_se + dt.timedelta(days=6)
+    meses = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
+    fecha = lambda f: f"{f.day} {meses[f.month - 1]}"
+
+    c1, c2 = st.columns([2.1, 1], gap="small")
+    with c1:
+        with st.container(key="panel_calendario"):
+            st.image("Calendario2026.png", use_container_width=True)
+    with c2:
+        with st.container(key="panel_cal_info"):
+            st.markdown(
+                '<div class="se-actual">'
+                '<div class="se-label">Semana epidemiológica actual</div>'
+                f'<div class="se-num">SE {se_actual}</div>'
+                f'<div class="se-fechas">{fecha(ini_se)} – {fecha(fin_se)} de {fin_se.year}</div>'
+                '</div>'
+                '<div class="lista-check">'
+                '<div><span class="ok">✓</span>Las semanas inician el domingo y terminan el sábado</div>'
+                '<div><span class="ok">✓</span>Base para la notificación semanal al Sivigila</div>'
+                '<div><span class="ok">✓</span>Calendario oficial del año 2026</div>'
+                '</div>',
+                unsafe_allow_html=True
+            )
+            with open("Calendario2026.pdf", "rb") as f:
+                st.download_button(
+                    "Descargar PDF",
+                    f,
+                    file_name="calendario_epidemiologico_2026.pdf",
+                    mime="application/pdf",
+                    icon=":material/download:",
+                    type="primary",
+                )
+
 elif opcion == "Manual de Codificación de EISP":
-    st.subheader("Manual de Codificación de EISP")
-    with st.container(height=900):
-        for img in paginas_pdf("Codificacion_EISP.pdf"):
-            st.image(img, use_container_width=True)
-    with open("Codificacion_EISP.pdf", "rb") as f:
-        st.download_button(
-            "⬇️ Descargar en PDF",
-            f,
-            file_name="Manual_Codificacion_EISP.pdf",
-            mime="application/pdf",
-            use_container_width=True
+    import os
+    peso = os.path.getsize("Codificacion_EISP.pdf") / 1024
+    with st.container(key="panel_manual"):
+        st.markdown(
+            '<div class="bol-head">'
+            f'<div class="tile-icon"><img src="data:image/png;base64,{b64_img("icono2.png")}"></div>'
+            '<div><div class="panel-titulo">Manual de Codificación de EISP</div>'
+            f'<div class="panel-sub">Documento PDF · {peso:,.0f} KB</div></div>'
+            '</div>'
+            '<p class="panel-texto">Guía oficial para la codificación de los eventos de interés en salud pública. '
+            'Descargue el documento completo para consultarlo en su equipo.</p>',
+            unsafe_allow_html=True
         )
+        with open("Codificacion_EISP.pdf", "rb") as f:
+            st.download_button(
+                "Descargar PDF",
+                f,
+                file_name="Manual_Codificacion_EISP.pdf",
+                mime="application/pdf",
+                icon=":material/download:",
+                type="primary",
+            )
 
 else:
-    st.subheader(titulos_powerbi[opcion])
-    url_activa = urls_powerbi[opcion]
-    st.components.v1.iframe(url_activa, height=alturas_powerbi[opcion], scrolling=False)
+    with st.container(key="panel_powerbi"):
+        h1, h2 = st.columns([4, 1], vertical_alignment="center")
+        h1.markdown(
+            '<div class="panel-titulo">Tablero interactivo</div>'
+            '<div class="panel-sub">Use los filtros del tablero para consultar por año, semana, evento y municipio.</div>',
+            unsafe_allow_html=True
+        )
+        h2.link_button("Pantalla completa", urls_powerbi[opcion], icon=":material/open_in_full:")
+        st.components.v1.iframe(urls_powerbi[opcion], height=alturas_powerbi[opcion], scrolling=False)
 
-# Pie de página institucional
-st.markdown("---")
-partes = [f"Fuentes: {FUENTES}"]
+# =====================================================================
+# 7. Pie de página institucional
+# =====================================================================
+datos_pie = [f"<span><b>Fuentes:</b> {FUENTES}</span>"]
 if ACTUALIZACION:
-    partes.append(f"Última actualización: {ACTUALIZACION}")
+    datos_pie.append(f"<span><b>Última actualización:</b> {ACTUALIZACION}</span>")
+elif RESUMEN:
+    datos_pie.append(f"<span><b>Datos hasta:</b> SE {RESUMEN['semana']} de {RESUMEN['anio']}</span>")
 if CONTACTO:
-    partes.append(f"Contacto: {CONTACTO}")
-st.caption("  |  ".join(partes) + "  \n© 2026 Área de Vigilancia Epidemiológica - Departamento del Caquetá. Información para uso estrictamente informativo y estadístico.")
+    datos_pie.append(f"<span><b>Contacto:</b> {CONTACTO}</span>")
+
+st.markdown(
+    '<div class="pie">'
+    '<div class="pie-fila">'
+    '<div><div class="pie-marca">Portal de Vigilancia Epidemiológica</div>'
+    '<div class="pie-entidad">Área de Vigilancia Epidemiológica · Secretaría de Salud Departamental del Caquetá</div></div>'
+    f'<div class="pie-datos">{"".join(datos_pie)}</div>'
+    '</div>'
+    '<div class="pie-legal">© 2026 Área de Vigilancia Epidemiológica - Departamento del Caquetá. '
+    'Información para uso estrictamente informativo y estadístico.</div>'
+    '</div>',
+    unsafe_allow_html=True
+)
