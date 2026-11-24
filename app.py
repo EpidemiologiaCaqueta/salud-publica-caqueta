@@ -478,7 +478,7 @@ st.sidebar.markdown(
 opcion = st.session_state.modulo
 
 # Encabezado compacto de cada módulo (Inicio tiene su propia portada)
-if opcion not in ("Inicio", "Vigilancia Epidemiológica"):
+if opcion not in ("Inicio", "Vigilancia Epidemiológica", "Estadísticas Vitales"):
     st.markdown(
         '<div class="page-head">'
         f'<div class="page-title">{opcion}</div>'
@@ -490,6 +490,17 @@ if opcion not in ("Inicio", "Vigilancia Epidemiológica"):
 # =====================================================================
 # 5. Tableros de Power BI
 # =====================================================================
+# Tableros HTML a pantalla completa: sin márgenes, sin pie y alto = alto de la ventana
+CSS_TABLERO = """<style>
+.block-container { padding: 0.3rem 0.6rem 0 0.6rem !important; max-width: none !important; }
+header[data-testid="stHeader"] { pointer-events: none; }
+header[data-testid="stHeader"] button { pointer-events: auto; }
+[data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"] { gap: 0 !important; }
+[data-testid="stElementContainer"]:has(> iframe.stIFrame) { height: auto !important; }
+iframe.stIFrame { height: calc(100vh - 0.6rem) !important; display: block; border-radius: 10px; }
+.pie { display: none !important; }
+</style>"""
+
 urls_powerbi = {
     "Vigilancia Epidemiológica": "https://app.powerbi.com/view?r=eyJrIjoiYzFiOTAwMzQtN2VkNy00NDhiLThjMTItZGY3NzNhMjExMTkwIiwidCI6IjkxOTM0N2Q1LTkyMWUtNDczOC05MGJkLTJkMTU4YzUzM2QzOCIsImMiOjR9",
     "Estadísticas Vitales": "https://app.powerbi.com/view?r=eyJrIjoiNTZiZjhlMzQtOTgxNS00MDUwLTlkMjMtMDQ2OWI3ZjA5YjU0IiwidCI6IjkxOTM0N2Q1LTkyMWUtNDczOC05MGJkLTJkMTU4YzUzM2QzOCIsImMiOjR9"
@@ -698,20 +709,12 @@ elif opcion == "Manual de Codificación de EISP":
 
 elif opcion == "Estadísticas Vitales":
     from pathlib import Path
-    st.iframe(Path(__file__).parent / "tablero_estadisticas_vitales.html", height=1400)
+    st.markdown(CSS_TABLERO, unsafe_allow_html=True)
+    st.iframe(Path(__file__).parent / "tablero_estadisticas_vitales.html", height=900)
 
 elif opcion == "Vigilancia Epidemiológica":
     from pathlib import Path
-    # Tablero a pantalla completa: sin márgenes y alto = alto de la ventana
-    st.markdown("""<style>
-.block-container { padding: 0.3rem 0.6rem 0 0.6rem !important; max-width: none !important; }
-header[data-testid="stHeader"] { pointer-events: none; }
-header[data-testid="stHeader"] button { pointer-events: auto; }
-[data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"] { gap: 0 !important; }
-[data-testid="stElementContainer"]:has(> iframe.stIFrame) { height: auto !important; }
-iframe.stIFrame { height: calc(100vh - 0.6rem) !important; display: block; border-radius: 10px; }
-.pie { display: none !important; }
-</style>""", unsafe_allow_html=True)
+    st.markdown(CSS_TABLERO, unsafe_allow_html=True)
     st.iframe(Path(__file__).parent / "tablero_eisp.html", height=900)
 
 else:
