@@ -325,24 +325,17 @@ iframe { border: 1px solid #DCE3EE; border-radius: 12px; background: #FFFFFF; }
 
 /* ---------- Pie de página ---------- */
 .pie {
-    margin-top: 1.6rem;
-    background: #0A2350;
-    border-radius: 14px;
-    padding: 1.2rem 1.5rem 0.9rem 1.5rem;
-    color: #B8C8E2;
-    font-size: 0.82rem;
+    margin-top: 0.8rem; background: #0A2350; border-radius: 10px;
+    padding: 0.4rem 1rem; color: #B8C8E2; font-size: 0.72rem;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.15rem 1.2rem;
 }
-.pie-fila { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.8rem 2rem; }
-.pie-marca { font-family: 'Poppins', sans-serif; color: #FFFFFF; font-weight: 700; font-size: 0.95rem; }
-.pie-entidad { color: #9FB3D6; font-size: 0.8rem; margin-top: 0.1rem; }
-.pie-datos { display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem; }
+.pie-fila { display: flex; flex-wrap: wrap; align-items: center; gap: 0.15rem 1.2rem; flex: 1 1 auto; }
+.pie-marca { display: inline; font-family: 'Poppins', sans-serif; color: #FFFFFF; font-weight: 700; font-size: 0.76rem; }
+.pie-entidad { display: inline; color: #9FB3D6; font-size: 0.7rem; margin-left: 0.5rem; }
+.pie-datos { display: flex; flex-wrap: wrap; gap: 0.15rem 1.2rem; }
 .pie-datos span { color: #B8C8E2; }
 .pie-datos b { color: #FFFFFF; font-weight: 600; }
-.pie-legal {
-    margin-top: 0.85rem; padding-top: 0.7rem;
-    border-top: 1px solid rgba(255,255,255,0.10);
-    font-size: 0.74rem; color: #7F94BA;
-}
+.pie-legal { font-size: 0.64rem; color: #7F94BA; }
 
 /* ---------- Celulares ---------- */
 @media (max-width: 900px) {
