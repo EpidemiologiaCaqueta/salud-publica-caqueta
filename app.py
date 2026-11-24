@@ -703,6 +703,10 @@ elif opcion == "Manual de Codificación de EISP":
                     unsafe_allow_html=True
                 )
 
+elif opcion == "Estadísticas Vitales":
+    from pathlib import Path
+    st.iframe(Path(__file__).parent / "tablero_estadisticas_vitales.html", height=1400)
+
 else:
     with st.container(key="panel_powerbi"):
         h1, h2 = st.columns([4, 1], vertical_alignment="center")
@@ -712,7 +716,7 @@ else:
             unsafe_allow_html=True
         )
         h2.link_button("Pantalla completa", urls_powerbi[opcion], icon=":material/open_in_full:")
-        st.components.v1.iframe(urls_powerbi[opcion], height=alturas_powerbi[opcion], scrolling=False)
+        st.iframe(urls_powerbi[opcion], height=alturas_powerbi[opcion])
 
 # =====================================================================
 # 7. Pie de página institucional
