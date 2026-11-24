@@ -711,10 +711,13 @@ elif opcion == "Vigilancia Epidemiológica":
     from pathlib import Path
     # Tablero a pantalla completa: sin márgenes y alto = alto de la ventana
     st.markdown("""<style>
-.block-container { padding: 0.5rem 0.6rem 0 0.6rem !important; max-width: none !important; }
+.block-container { padding: 0.3rem 0.6rem 0 0.6rem !important; max-width: none !important; }
 header[data-testid="stHeader"] { pointer-events: none; }
 header[data-testid="stHeader"] button { pointer-events: auto; }
-iframe.stIFrame { height: calc(100vh - 1.4rem) !important; display: block; border-radius: 10px; }
+[data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"] { gap: 0 !important; }
+[data-testid="stElementContainer"]:has(> iframe.stIFrame) { height: auto !important; }
+iframe.stIFrame { height: calc(100vh - 0.6rem) !important; display: block; border-radius: 10px; }
+.pie { display: none !important; }
 </style>""", unsafe_allow_html=True)
     st.iframe(Path(__file__).parent / "tablero_eisp.html", height=900)
 
