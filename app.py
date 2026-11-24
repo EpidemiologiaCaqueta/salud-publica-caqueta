@@ -707,6 +707,10 @@ elif opcion == "Estadísticas Vitales":
     from pathlib import Path
     st.iframe(Path(__file__).parent / "tablero_estadisticas_vitales.html", height=1400)
 
+elif opcion == "Vigilancia Epidemiológica":
+    from pathlib import Path
+    st.iframe(Path(__file__).parent / "tablero_eisp.html", height=920)
+
 else:
     with st.container(key="panel_powerbi"):
         h1, h2 = st.columns([4, 1], vertical_alignment="center")
