@@ -485,7 +485,7 @@ st.sidebar.markdown(
 opcion = st.session_state.modulo
 
 # Encabezado compacto de cada módulo (Inicio tiene su propia portada)
-if opcion != "Inicio":
+if opcion not in ("Inicio", "Vigilancia Epidemiológica"):
     st.markdown(
         '<div class="page-head">'
         f'<div class="page-title">{opcion}</div>'
@@ -709,7 +709,14 @@ elif opcion == "Estadísticas Vitales":
 
 elif opcion == "Vigilancia Epidemiológica":
     from pathlib import Path
-    st.iframe(Path(__file__).parent / "tablero_eisp.html", height=920)
+    # Tablero a pantalla completa: sin márgenes y alto = alto de la ventana
+    st.markdown("""<style>
+.block-container { padding: 0.5rem 0.6rem 0 0.6rem !important; max-width: none !important; }
+header[data-testid="stHeader"] { pointer-events: none; }
+header[data-testid="stHeader"] button { pointer-events: auto; }
+iframe.stIFrame { height: calc(100vh - 1.4rem) !important; display: block; border-radius: 10px; }
+</style>""", unsafe_allow_html=True)
+    st.iframe(Path(__file__).parent / "tablero_eisp.html", height=900)
 
 else:
     with st.container(key="panel_powerbi"):
