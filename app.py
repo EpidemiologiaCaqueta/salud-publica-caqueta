@@ -420,6 +420,7 @@ st.sidebar.markdown(
 ICONOS = {
     "Inicio": ":material/home:",
     "Vigilancia Epidemiológica": ":material/monitoring:",
+    "Tuberculosis": ":material/pulmonology:",
     "Estadísticas Vitales": ":material/bar_chart:",
     "Georreferenciación de EISP": ":material/map:",
     "Boletines Epidemiológicos": ":material/newspaper:",
@@ -429,6 +430,7 @@ ICONOS = {
 
 DESCRIPCIONES = {
     "Vigilancia Epidemiológica": "Análisis de los eventos de interés en salud pública notificados al Sivigila.",
+    "Tuberculosis": "Tablero del programa de tuberculosis (evento 813): clasificación, diagnóstico, resistencia e indicadores.",
     "Estadísticas Vitales": "Cifras de nacimientos y defunciones del departamento.",
     "Georreferenciación de EISP": "Mapa de casos en puntos, calor y tasas por municipio, con todos los eventos de interés.",
     "Boletines Epidemiológicos": "Histórico de boletines organizados por semana epidemiológica (SE).",
@@ -444,6 +446,7 @@ if "modulo" not in st.session_state:
 ETIQUETAS = {
     "Inicio": "Inicio",
     "Vigilancia Epidemiológica": "Eventos de interés (EISP)",
+    "Tuberculosis": "Tuberculosis",
     "Estadísticas Vitales": "Estadísticas vitales",
     "Georreferenciación de EISP": "Georreferenciación",
     "Boletines Epidemiológicos": "Boletines",
@@ -452,7 +455,7 @@ ETIQUETAS = {
 }
 GRUPOS = [
     ("General", ["Inicio"]),
-    ("Análisis", ["Vigilancia Epidemiológica", "Estadísticas Vitales", "Georreferenciación de EISP"]),
+    ("Análisis", ["Vigilancia Epidemiológica", "Tuberculosis", "Estadísticas Vitales", "Georreferenciación de EISP"]),
     ("Documentos", ["Boletines Epidemiológicos", "Calendario Epidemiológico 2026", "Manual de Codificación de EISP"]),
 ]
 
@@ -478,7 +481,7 @@ st.sidebar.markdown(
 opcion = st.session_state.modulo
 
 # Encabezado compacto de cada módulo (Inicio tiene su propia portada)
-if opcion not in ("Inicio", "Vigilancia Epidemiológica", "Estadísticas Vitales", "Georreferenciación de EISP"):
+if opcion not in ("Inicio", "Vigilancia Epidemiológica", "Tuberculosis", "Estadísticas Vitales", "Georreferenciación de EISP"):
     st.markdown(
         '<div class="page-head">'
         f'<div class="page-title">{opcion}</div>'
@@ -584,6 +587,11 @@ if opcion == "Inicio":
                     args=(destino,),
                     use_container_width=True,
                 )
+
+elif opcion == "Tuberculosis":
+    from pathlib import Path
+    st.markdown(CSS_TABLERO, unsafe_allow_html=True)
+    st.iframe(Path(__file__).parent / "tablero_tb.html", height=900)
 
 elif opcion == "Georreferenciación de EISP":
     from pathlib import Path
