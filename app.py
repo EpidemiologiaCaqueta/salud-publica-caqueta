@@ -430,7 +430,7 @@ ICONOS = {
 DESCRIPCIONES = {
     "Vigilancia Epidemiológica": "Análisis de los eventos de interés en salud pública notificados al Sivigila.",
     "Estadísticas Vitales": "Cifras de nacimientos y defunciones del departamento.",
-    "Georreferenciación de EISP": "Casos por municipio con filtros por evento, año y semana epidemiológica.",
+    "Georreferenciación de EISP": "Mapa de casos en puntos, calor y tasas por municipio, con todos los eventos de interés.",
     "Boletines Epidemiológicos": "Histórico de boletines organizados por semana epidemiológica (SE).",
     "Calendario Epidemiológico 2026": "Semanas epidemiológicas oficiales del año 2026.",
     "Manual de Codificación de EISP": "Guía oficial de codificación de los eventos de interés en salud pública.",
@@ -478,7 +478,7 @@ st.sidebar.markdown(
 opcion = st.session_state.modulo
 
 # Encabezado compacto de cada módulo (Inicio tiene su propia portada)
-if opcion not in ("Inicio", "Vigilancia Epidemiológica", "Estadísticas Vitales"):
+if opcion not in ("Inicio", "Vigilancia Epidemiológica", "Estadísticas Vitales", "Georreferenciación de EISP"):
     st.markdown(
         '<div class="page-head">'
         f'<div class="page-title">{opcion}</div>'
@@ -585,7 +585,9 @@ if opcion == "Inicio":
                 )
 
 elif opcion == "Georreferenciación de EISP":
-    render_mapa()
+    from pathlib import Path
+    st.markdown(CSS_TABLERO, unsafe_allow_html=True)
+    st.iframe(Path(__file__).parent / "tablero_geo.html", height=900)
 
 elif opcion == "Boletines Epidemiológicos":
     URL_BOLETINES = "https://drive.google.com/drive/folders/1tUQdlVhytJqKxA6-tBK4Yw7pThfy-X0h?usp=sharing"
