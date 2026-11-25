@@ -495,6 +495,7 @@ CSS_TABLERO = """<style>
 .block-container { padding: 0.3rem 0.6rem 0 0.6rem !important; max-width: none !important; }
 header[data-testid="stHeader"] { pointer-events: none; }
 header[data-testid="stHeader"] button { pointer-events: auto; }
+[data-testid="stToolbar"], [data-testid="stDecoration"], [data-testid="stStatusWidget"] { display: none !important; }
 [data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"] { gap: 0 !important; }
 [data-testid="stElementContainer"]:has(> iframe.stIFrame) { height: auto !important; }
 iframe.stIFrame { height: calc(100vh - 0.6rem) !important; display: block; border-radius: 10px; }
