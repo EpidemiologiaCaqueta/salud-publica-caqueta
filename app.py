@@ -498,7 +498,11 @@ CSS_TABLERO = """<style>
 .block-container { padding: 0.3rem 0.6rem 0 0.6rem !important; max-width: none !important; }
 header[data-testid="stHeader"] { pointer-events: none; }
 header[data-testid="stHeader"] button { pointer-events: auto; }
-[data-testid="stToolbar"], [data-testid="stDecoration"], [data-testid="stStatusWidget"] { display: none !important; }
+[data-testid="stToolbar"] { pointer-events: none !important; background: transparent !important; }
+[data-testid="stToolbarActions"], [data-testid="stMainMenu"], [data-testid="stAppDeployButton"], [data-testid="stDecoration"], [data-testid="stStatusWidget"] { display: none !important; }
+/* Botón para abrir el menú lateral: siempre visible sobre el tablero (sobre todo en celular) */
+[data-testid="stExpandSidebarButton"], [data-testid="stSidebarCollapsedControl"] { display: flex !important; visibility: visible !important; pointer-events: auto !important; position: fixed !important; top: 0.55rem; left: 0.55rem; z-index: 1000002; background: #FFFFFF !important; border: 1px solid #CBD5E1; border-radius: 10px; box-shadow: 0 2px 10px rgba(15,23,42,.25); }
+[data-testid="stExpandSidebarButton"] *, [data-testid="stSidebarCollapsedControl"] * { pointer-events: auto !important; color: #0B3C8C !important; }
 [data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"] { gap: 0 !important; }
 [data-testid="stElementContainer"]:has(> iframe.stIFrame) { height: auto !important; }
 iframe.stIFrame { height: calc(100vh - 0.6rem) !important; display: block; border-radius: 10px; }
