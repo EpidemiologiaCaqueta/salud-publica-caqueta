@@ -474,8 +474,7 @@ for grupo, nombres in GRUPOS:
         )
 
 st.sidebar.markdown(
-    '<div class="side-foot">Secretaría de Salud Departamental<br>'
-    'Gobernación del Caquetá</div>',
+    '<div class="side-foot">Área de Sistemas de Información VSP</div>',
     unsafe_allow_html=True
 )
 
@@ -745,11 +744,10 @@ if CONTACTO:
 st.markdown(
     '<div class="pie">'
     '<div class="pie-fila">'
-    '<div><div class="pie-marca">Gobernación del Caquetá</div>'
-    '<div class="pie-entidad">Secretaría de Salud Departamental</div></div>'
+    '<div><div class="pie-marca">Área de Sistemas de Información VSP</div></div>'
     f'<div class="pie-datos">{"".join(datos_pie)}</div>'
     '</div>'
-    '<div class="pie-legal">© 2026 Gobernación del Caquetá. '
+    '<div class="pie-legal">© 2026 · '
     'Información para uso estrictamente informativo y estadístico.</div>'
     '</div>',
     unsafe_allow_html=True
