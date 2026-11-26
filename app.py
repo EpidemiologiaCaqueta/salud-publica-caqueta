@@ -530,7 +530,6 @@ if opcion == "Inicio":
         st.markdown(P.hero(R, [P.b64("logo_gobernacion.png"), P.b64("logo_caqueta.png"), P.b64("logo_vigilancia.png")]),
                     unsafe_allow_html=True)
         st.markdown(P.kpis(R), unsafe_allow_html=True)
-        st.markdown(f'<div class="graf">{P.curva(R)}{P.top_eventos(R)}</div>', unsafe_allow_html=True)
 
     # ---- Módulos ----
     st.markdown(
@@ -559,8 +558,8 @@ if opcion == "Inicio":
          "Calendario epidemiológico 2026 y manual oficial de codificación de los EISP.",
          "Calendario y manual", "Calendario Epidemiológico 2026"),
     ]
-    for fila in (TARJETAS[:3], TARJETAS[3:]):
-        for col, (clave, ic, color, fondo, tag, titulo, desc, dato, destino) in zip(st.columns(3), fila):
+    for fila in (TARJETAS,):
+        for col, (clave, ic, color, fondo, tag, titulo, desc, dato, destino) in zip(st.columns(6), fila):
             with col:
                 with st.container(key=f"card_{clave}"):
                     st.markdown(
