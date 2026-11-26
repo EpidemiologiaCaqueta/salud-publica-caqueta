@@ -406,7 +406,8 @@ def ir_a(modulo):
 
 
 import os
-RESUMEN = resumen_datos(os.path.getmtime("casos_municipio.csv") if os.path.exists("casos_municipio.csv") else None)
+import portada
+RESUMEN = portada.resumen(portada.version())
 
 # =====================================================================
 # 4. Menú lateral
@@ -522,75 +523,64 @@ alturas_powerbi = {
 # 6. Contenido de cada módulo
 # =====================================================================
 if opcion == "Inicio":
-    # ---- Banner con indicadores ----
-    if RESUMEN:
-        meta = f'<span class="punto"></span>Datos actualizados a la SE {RESUMEN["semana"]} de {RESUMEN["anio"]}'
-        stats = (
-            f'<div class="stat"><div class="stat-valor">{RESUMEN["eventos"]}</div><div class="stat-label">Eventos georreferenciados</div></div>'
-            f'<div class="stat"><div class="stat-valor">{RESUMEN["semana"]}<small>SE</small></div><div class="stat-label">Última semana epidemiológica</div></div>'
-            '<div class="stat"><div class="stat-valor">16</div><div class="stat-label">Municipios del Caquetá</div></div>'
-        )
-    else:
-        meta = '<span class="punto"></span>Información oficial del departamento'
-        stats = '<div class="stat"><div class="stat-valor">16</div><div class="stat-label">Municipios del Caquetá</div></div>'
+    import portada as P
+    st.markdown(P.CSS, unsafe_allow_html=True)
+    R = P.resumen(P.version())
+    if R:
+        st.markdown(P.hero(R, [P.b64("logo_gobernacion.png"), P.b64("logo_caqueta.png"), P.b64("logo_vigilancia.png")]),
+                    unsafe_allow_html=True)
+        st.markdown(P.kpis(R), unsafe_allow_html=True)
+        st.markdown(f'<div class="graf">{P.curva(R)}{P.top_eventos(R)}</div>', unsafe_allow_html=True)
 
-    st.markdown(
-        '<div class="hero">'
-        '<div style="position: relative; z-index: 1;">'
-        '<p class="hero-eyebrow">Secretaría de Salud Departamental del Caquetá</p>'
-        '<h1 class="hero-title">Portal de Vigilancia Epidemiológica</h1>'
-        '<p class="hero-sub">Información oficial de vigilancia en salud pública del Caquetá: eventos de interés '
-        'notificados al Sivigila, estadísticas vitales, georreferenciación, boletines y documentos técnicos.</p>'
-        f'<div class="hero-meta">{meta}</div>'
-        '</div>'
-        f'<div class="hero-stats">{stats}</div>'
-        '</div>',
-        unsafe_allow_html=True
-    )
-
-    # ---- Accesos directos ----
+    # ---- Módulos ----
     st.markdown(
         '<div class="seccion"><span class="seccion-titulo">Módulos del portal</span>'
         '<span class="seccion-nota">Seleccione un módulo para comenzar</span></div>',
         unsafe_allow_html=True
     )
-
+    f = (lambda k: P._fmt(R[k]) if R and R.get(k) is not None else "–")
     TARJETAS = [
-        ("tableros", "icono1.png", "Interactivo", "Tableros interactivos",
-         "Filtros por semana, año y evento epidemiológico con actualización continua.",
-         "Vigilancia Epidemiológica"),
-        ("georreferenciacion", "icono4.png", "Mapas", "Georreferenciación",
-         "Casos por municipio de los eventos de interés en salud pública del Caquetá.",
-         "Georreferenciación de EISP"),
-        ("boletines", "icono3.png", "Repositorio", "Boletines epidemiológicos",
-         "Histórico ordenado por semanas epidemiológicas, disponible en la nube.",
-         "Boletines Epidemiológicos"),
-        ("documentos", "icono2.png", "Documentos", "Documentos de consulta",
-         "Calendario epidemiológico anual y manual oficial de codificación de EISP.",
-         "Calendario Epidemiológico 2026"),
+        ("eisp", "pulso", "#0B3C8C", "#E8EFFB", "Tablero interactivo", "Eventos de interés (EISP)",
+         "Casos por evento, semana, municipio, sexo y edad, con filtros cruzados y canal de notificación.",
+         f"{f('casos')} casos · SE {R['semana'] if R else '–'}", "Vigilancia Epidemiológica"),
+        ("tb", "pulmon", "#BE123C", "#FCE8EC", "Programa", "Tuberculosis",
+         "Clasificación clínica, diagnóstico, farmacorresistencia, coinfección TB/VIH e indicadores del programa.",
+         f"{f('tb')} casos activos", "Tuberculosis"),
+        ("vitales", "bebe", "#1F63C6", "#E6F0FC", "RUAF-ND", "Estadísticas vitales",
+         "Nacimientos y defunciones por municipio, edad de la madre, peso al nacer y causas de muerte.",
+         f"{f('nac')} nacimientos · {f('def')} defunciones", "Estadísticas Vitales"),
+        ("georreferenciacion", "pin", "#6B4F9E", "#EFEAF7", "Mapas", "Georreferenciación",
+         "Puntos, focos, calor y tasas por municipio para ubicar dónde se concentran los casos.",
+         f"{f('ubicados')} casos ubicados", "Georreferenciación de EISP"),
+        ("boletines", "diario", "#0F8F86", "#E3F5F3", "Repositorio", "Boletines epidemiológicos",
+         "Histórico de boletines ordenado por semana epidemiológica, disponible en la nube.",
+         "Por semana epidemiológica", "Boletines Epidemiológicos"),
+        ("documentos", "libro", "#B45309", "#FDF1E3", "Documentos", "Documentos de consulta",
+         "Calendario epidemiológico 2026 y manual oficial de codificación de los EISP.",
+         "Calendario y manual", "Calendario Epidemiológico 2026"),
     ]
-
-    columnas = st.columns(4)
-    for col, (clave, img, tag, titulo, desc, destino) in zip(columnas, TARJETAS):
-        with col:
-            with st.container(key=f"card_{clave}"):
-                st.markdown(
-                    '<div class="tile-head">'
-                    f'<div class="tile-icon"><img src="data:image/png;base64,{b64_img(img)}"></div>'
-                    f'<span class="tile-tag">{tag}</span>'
-                    '</div>'
-                    f'<div class="tile-title">{titulo}</div>'
-                    f'<p class="tile-desc">{desc}</p>',
-                    unsafe_allow_html=True
-                )
-                st.button(
-                    "Abrir módulo",
-                    key=f"ir_{clave}",
-                    icon=":material/arrow_forward:",
-                    on_click=ir_a,
-                    args=(destino,),
-                    use_container_width=True,
-                )
+    for fila in (TARJETAS[:3], TARJETAS[3:]):
+        for col, (clave, ic, color, fondo, tag, titulo, desc, dato, destino) in zip(st.columns(3), fila):
+            with col:
+                with st.container(key=f"card_{clave}"):
+                    st.markdown(
+                        '<div class="tile-head">'
+                        f'<div class="tile-ic2" style="background:{fondo}">{P.icono(ic, color, 26)}</div>'
+                        f'<span class="tile-tag">{tag}</span>'
+                        '</div>'
+                        f'<div class="tile-title">{titulo}</div>'
+                        f'<p class="tile-desc">{desc}</p>'
+                        f'<span class="tile-dato" style="background:{fondo};color:{color}">{dato}</span>',
+                        unsafe_allow_html=True
+                    )
+                    st.button(
+                        "Abrir módulo",
+                        key=f"ir_{clave}",
+                        icon=":material/arrow_forward:",
+                        on_click=ir_a,
+                        args=(destino,),
+                        use_container_width=True,
+                    )
 
 elif opcion == "Tuberculosis":
     from pathlib import Path
