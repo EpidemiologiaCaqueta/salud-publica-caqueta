@@ -159,7 +159,6 @@ def hero(r, logos):
     return (
         '<div class="h2o">'
         '<div class="h-izq">'
-        f'<div class="h-logos">{logos_html}</div>'
         '<p class="h-eyebrow">Secretaría de Salud Departamental del Caquetá</p>'
         '<h1 class="h-titulo">Portal de Vigilancia<br>Epidemiológica</h1>'
         '<p class="h-sub">Cifras oficiales y tableros interactivos de los eventos de interés en salud pública '
@@ -304,5 +303,10 @@ CSS = """<style>
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 [class*="st-key-card_"] .tile-tag { font-size: .6rem; }
 .block-container { padding-top: 1.1rem !important; padding-bottom: .5rem !important; }
+[data-testid="stHorizontalBlock"]:has([class*="st-key-card_"]) { align-items: stretch !important; }
+[data-testid="stColumn"]:has(> div > [class*="st-key-card_"]) > div, [data-testid="stColumn"]:has([class*="st-key-card_"]) [data-testid="stVerticalBlock"]:has(> [class*="st-key-card_"]) { height: 100% !important; }
+[class*="st-key-card_"] { height: 100% !important; }
+[class*="st-key-card_"] .tile-title { min-height: 2.5em; display: flex; align-items: flex-end; }
+[class*="st-key-card_"] .tile-desc { min-height: 4.2em; }
 .seccion { margin-top: .9rem !important; margin-bottom: .5rem !important; }
 </style>"""
