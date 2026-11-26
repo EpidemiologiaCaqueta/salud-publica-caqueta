@@ -474,8 +474,8 @@ for grupo, nombres in GRUPOS:
         )
 
 st.sidebar.markdown(
-    '<div class="side-foot">Área de Vigilancia Epidemiológica<br>'
-    'Secretaría de Salud Departamental del Caquetá</div>',
+    '<div class="side-foot">Secretaría de Salud Departamental<br>'
+    'Gobernación del Caquetá</div>',
     unsafe_allow_html=True
 )
 
@@ -745,11 +745,11 @@ if CONTACTO:
 st.markdown(
     '<div class="pie">'
     '<div class="pie-fila">'
-    '<div><div class="pie-marca">Portal de Vigilancia Epidemiológica</div>'
-    '<div class="pie-entidad">Área de Vigilancia Epidemiológica · Secretaría de Salud Departamental del Caquetá</div></div>'
+    '<div><div class="pie-marca">Gobernación del Caquetá</div>'
+    '<div class="pie-entidad">Secretaría de Salud Departamental</div></div>'
     f'<div class="pie-datos">{"".join(datos_pie)}</div>'
     '</div>'
-    '<div class="pie-legal">© 2026 Área de Vigilancia Epidemiológica - Departamento del Caquetá. '
+    '<div class="pie-legal">© 2026 Gobernación del Caquetá. '
     'Información para uso estrictamente informativo y estadístico.</div>'
     '</div>',
     unsafe_allow_html=True
