@@ -2,3 +2,6 @@
 # Version interna con ubicaciones reales: NUNCA publicar
 tablero_geo_interno.html
 *.csv.bak
+
+# Documentos de casos descartados por unidad de análisis: NUNCA publicar
+descartados_unidad_analisis.csv
