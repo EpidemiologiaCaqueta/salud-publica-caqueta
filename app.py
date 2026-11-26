@@ -568,8 +568,7 @@ if opcion == "Inicio":
                         f'<span class="tile-tag">{tag}</span>'
                         '</div>'
                         f'<div class="tile-title">{titulo}</div>'
-                        f'<p class="tile-desc">{desc}</p>'
-                        f'<span class="tile-dato" style="background:{fondo};color:{color}">{dato}</span>',
+                        f'<p class="tile-desc">{desc}</p>',
                         unsafe_allow_html=True
                     )
                     st.button(
