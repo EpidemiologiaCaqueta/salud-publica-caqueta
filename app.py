@@ -540,22 +540,22 @@ if opcion == "Inicio":
     f = (lambda k: P._fmt(R[k]) if R and R.get(k) is not None else "–")
     TARJETAS = [
         ("eisp", "pulso", "#0B3C8C", "#E8EFFB", "Tablero interactivo", "Eventos de interés (EISP)",
-         "Casos por evento, semana, municipio, sexo y edad, con filtros cruzados y canal de notificación.",
+         "Casos por evento, semana, municipio, sexo y edad.",
          f"{f('casos')} casos · SE {R['semana'] if R else '–'}", "Vigilancia Epidemiológica"),
         ("tb", "pulmon", "#BE123C", "#FCE8EC", "Programa", "Tuberculosis",
-         "Clasificación clínica, diagnóstico, farmacorresistencia, coinfección TB/VIH e indicadores del programa.",
+         "Diagnóstico, resistencia, coinfección TB/VIH e indicadores.",
          f"{f('tb')} casos activos", "Tuberculosis"),
         ("vitales", "bebe", "#1F63C6", "#E6F0FC", "RUAF-ND", "Estadísticas vitales",
-         "Nacimientos y defunciones por municipio, edad de la madre, peso al nacer y causas de muerte.",
+         "Nacimientos y defunciones por municipio y causa.",
          f"{f('nac')} nacimientos · {f('def')} defunciones", "Estadísticas Vitales"),
         ("georreferenciacion", "pin", "#6B4F9E", "#EFEAF7", "Mapas", "Georreferenciación",
-         "Puntos, focos, calor y tasas por municipio para ubicar dónde se concentran los casos.",
+         "Puntos, focos y tasas: dónde se concentran los casos.",
          f"{f('ubicados')} casos ubicados", "Georreferenciación de EISP"),
         ("boletines", "diario", "#0F8F86", "#E3F5F3", "Repositorio", "Boletines epidemiológicos",
-         "Histórico de boletines ordenado por semana epidemiológica, disponible en la nube.",
+         "Histórico de boletines por semana epidemiológica.",
          "Por semana epidemiológica", "Boletines Epidemiológicos"),
         ("documentos", "libro", "#B45309", "#FDF1E3", "Documentos", "Documentos de consulta",
-         "Calendario epidemiológico 2026 y manual oficial de codificación de los EISP.",
+         "Calendario 2026 y manual de codificación de EISP.",
          "Calendario y manual", "Calendario Epidemiológico 2026"),
     ]
     for fila in (TARJETAS,):

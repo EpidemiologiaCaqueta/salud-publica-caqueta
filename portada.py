@@ -303,10 +303,9 @@ CSS = """<style>
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 [class*="st-key-card_"] .tile-tag { font-size: .6rem; }
 .block-container { padding-top: 1.1rem !important; padding-bottom: .5rem !important; }
-[data-testid="stHorizontalBlock"]:has([class*="st-key-card_"]) { align-items: stretch !important; }
-[data-testid="stColumn"]:has(> div > [class*="st-key-card_"]) > div, [data-testid="stColumn"]:has([class*="st-key-card_"]) [data-testid="stVerticalBlock"]:has(> [class*="st-key-card_"]) { height: 100% !important; }
-[class*="st-key-card_"] { height: 100% !important; }
-[class*="st-key-card_"] .tile-title { min-height: 2.5em; display: flex; align-items: flex-end; }
-[class*="st-key-card_"] .tile-desc { min-height: 4.2em; }
+[class*="st-key-card_"] > * { flex-shrink: 0 !important; }
+[class*="st-key-card_"] [data-testid="stElementContainer"], [class*="st-key-card_"] [data-testid="stMarkdown"] { height: auto !important; overflow: visible !important; }
+[class*="st-key-card_"] .tile-title { height: 2.6em; line-height: 1.3em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+[class*="st-key-card_"] .tile-desc { height: 4.2em !important; margin-bottom: .5rem !important; }
 .seccion { margin-top: .9rem !important; margin-bottom: .5rem !important; }
 </style>"""
