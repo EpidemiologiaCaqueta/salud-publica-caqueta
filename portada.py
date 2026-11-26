@@ -250,7 +250,7 @@ CSS = """<style>
 .h-eyebrow { color: #9CC0F5 !important; font-size: .74rem !important; font-weight: 700; letter-spacing: .16em;
   text-transform: uppercase; margin: 0 0 .45rem 0 !important; }
 .h-titulo { color: #FFFFFF !important; font-family: 'Poppins', sans-serif !important; font-weight: 800 !important;
-  font-size: 2.55rem !important; line-height: 1.08 !important; margin: 0 0 .7rem 0 !important; padding: 0 !important; }
+  font-size: clamp(1.6rem, 2.5vw, 2.55rem) !important; line-height: 1.08 !important; word-break: keep-all; overflow-wrap: normal; hyphens: none; margin: 0 0 .7rem 0 !important; padding: 0 !important; }
 .h-sub { color: #D5E3F8 !important; font-size: .98rem !important; line-height: 1.55 !important; max-width: 640px; margin: 0 0 1rem 0 !important; }
 .h-chips { display: flex; flex-wrap: wrap; gap: .5rem; }
 .h-chip { display: inline-flex; align-items: center; gap: .4rem; color: #E8F0FC; font-size: .78rem; font-weight: 600;
@@ -291,10 +291,10 @@ CSS = """<style>
 .tile-ic2 { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; }
 .tile-dato { display: inline-flex; align-items: center; gap: .35rem; margin-top: .55rem; font-size: .76rem; font-weight: 600;
   border-radius: 8px; padding: .22rem .55rem; }
-@media (max-width: 1250px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1250px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } .h2o { grid-template-columns: 1fr; } .h-mapa { height: 220px; } }
 @media (max-width: 900px) {
   .h2o { grid-template-columns: 1fr; padding: 1.3rem 1.2rem; }
-  .h-titulo { font-size: 1.75rem !important; } .h-logos img { height: 36px; }
+  .h-logos img { height: 36px; }
   .graf { grid-template-columns: 1fr; } .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .h-mapa { height: 190px; }
 }
